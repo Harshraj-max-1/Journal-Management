@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  AUTHOR
+  REVIEWER
+  EDITOR
+  ADMIN
+  READER
+}
+
+enum PaperStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  PUBLISHED
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  password      String         
+  role          Role           @default(READER)
+  createdAt     DateTime       @default(now())
+  
+  papers        Paper[]        @relation("PaperAuthor")
+  reviews       Review[]       @relation("ReviewAuthor")
+  notifications Notification[]
+}
+
+model Paper {
+  id               String      @id @default(cuid())
+  // Original Author Version
+  originalTitle    String
+  originalAbstract String
+  originalFileUrl  String?
+  
+  // Editor Redined Version
+  editedTitle      String?
+  editedAbstract   String?
+  editedFileUrl    String?
+  editorNotes      String?     @db.Text
+  
+  // Legacy fields (for compatibility)
+  title            String      // Current working title
+  abstract         String      // Current working abstract
+  fileUrl          String?     // Current working file
+  
+  status           PaperStatus @default(DRAFT)
+  
+  authorId         String
+  author           User        @relation("PaperAuthor", fields: [authorId], references: [id])
+  
+  reviews          Review[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  paperId    String
+  paper      Paper    @relation(fields: [paperId], references: [id])
+  
+  reviewerId String
+  reviewer   User     @relation("ReviewAuthor", fields: [reviewerId], references: [id])
+  
+  comments   String   @db.Text
+  rating     Int
+  decision   String
+  createdAt  DateTime @default(now())
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+}
+
+model JournalIssue {
+  id          String    @id @default(cuid())
+  title       String
+  volume      Int
+  issue       Int
+  description String?
+  publishedAt DateTime?
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
