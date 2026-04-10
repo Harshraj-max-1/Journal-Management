@@ -32,8 +32,7 @@ export default function LoginPage() {
       if (res?.error) {
         setError("Invalid authentication credentials.");
       } else {
-        router.push("/");
-        router.refresh();
+        window.location.href = "/";
       }
     } catch (err) {
       setError("A system anomaly occurred.");
