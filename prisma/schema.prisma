@@ -8,7 +8,7 @@ datasource db {
 
 enum Role {
   AUTHOR
-  REVIEWER
+  PUBLISHER
   EDITOR
   ADMIN
   READER
@@ -65,17 +65,17 @@ model Paper {
 }
 
 model Review {
-  id         String   @id @default(cuid())
-  paperId    String
-  paper      Paper    @relation(fields: [paperId], references: [id])
+  id          String   @id @default(cuid())
+  paperId     String
+  paper       Paper    @relation(fields: [paperId], references: [id])
   
-  reviewerId String
-  reviewer   User     @relation("ReviewAuthor", fields: [reviewerId], references: [id])
+  publisherId String
+  publisher   User     @relation("ReviewAuthor", fields: [publisherId], references: [id])
   
-  comments   String   @db.Text
-  rating     Int
-  decision   String
-  createdAt  DateTime @default(now())
+  comments    String   @db.Text
+  rating      Int
+  decision    String
+  createdAt   DateTime @default(now())
 }
 
 model Category {

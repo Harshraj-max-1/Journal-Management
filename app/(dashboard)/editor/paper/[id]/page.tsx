@@ -162,7 +162,7 @@ export default function EditorMarkupPage({ params }: { params: Promise<{ id: str
                     <textarea 
                       value={editorNotes}
                       onChange={(e) => setEditorNotes(e.target.value)}
-                      placeholder="Guidance for peer reviewers..."
+                      placeholder="Guidance for publishers..."
                       className="w-full bg-slate-50 border-2 border-slate-100 p-6 rounded-2xl text-[10px] font-bold uppercase tracking-widest h-24 focus:outline-none focus:border-indigo-600 focus:bg-white"
                     />
                   </div>
@@ -193,14 +193,14 @@ export default function EditorMarkupPage({ params }: { params: Promise<{ id: str
           
           <section className="markup-ready pt-12 space-y-10">
              <div className="flex items-center gap-4">
-                <h2 className="text-4xl font-extrabold uppercase tracking-tight text-slate-800">Reviewer Critique Panel</h2>
+                <h2 className="text-4xl font-extrabold uppercase tracking-tight text-slate-800">Publisher Critique Panel</h2>
                 <div className="h-1 flex-1 bg-slate-100 rounded-full"></div>
              </div>
              <div className="grid md:grid-cols-2 gap-8">
                {paper.reviews.map((review: any) => (
                  <div key={review.id} className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 hover:shadow-2xl hover:-translate-y-2 transition-all">
                     <div className="flex justify-between items-center pb-4 mb-4 border-b border-slate-50">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{review.reviewer.name}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">{review.publisher.name}</span>
                       <span className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">{review.rating}</span>
                     </div>
                     <p className="italic font-medium text-slate-500 leading-relaxed">"{review.comments}"</p>
@@ -241,7 +241,7 @@ export default function EditorMarkupPage({ params }: { params: Promise<{ id: str
                      onClick={() => updateStatus('UNDER_REVIEW')}
                      className="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-indigo-700 active:scale-95 transition-all text-center"
                   >
-                    Distribute to Reviewers
+                    Distribute to Publishers
                   </button>
                 </div>
               </div>

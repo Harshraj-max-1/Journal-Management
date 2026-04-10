@@ -5,7 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { PDFModal } from "@/components/PDFModal";
 
-export default function ReviewerHistory() {
+export default function PublisherHistory() {
   const [papers, setPapers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPaper, setSelectedPaper] = useState<any>(null);
@@ -31,7 +31,7 @@ export default function ReviewerHistory() {
       <header className="space-y-6">
         <div className="flex items-center gap-4">
            <span className="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-indigo-100">⚖️</span>
-           <span className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-300">Peer Review Archives</span>
+           <span className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-300">Publisher Archives</span>
         </div>
         <h1 className="text-8xl font-black tracking-tighter text-slate-900 leading-[0.8] border-l-[20px] border-indigo-600 pl-10">Critique Log</h1>
         <p className="text-slate-400 font-medium text-2xl italic max-w-xl leading-relaxed">Retrospective analysis of your scientific evaluations and technical critiques.</p>

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { PDFModal } from "@/components/PDFModal";
 
-export default function ReviewerComparisonPage({ params }: { params: Promise<{ id: string }> }) {
+export default function PublisherComparisonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [paper, setPaper] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export default function ReviewerComparisonPage({ params }: { params: Promise<{ i
         body: JSON.stringify({ paperId: id, rating, comments, decision }),
       });
       if (res.ok) {
-        router.push("/reviewer");
+        router.push("/publisher");
       }
     } catch (err) {
       console.error(err);
@@ -65,7 +65,7 @@ export default function ReviewerComparisonPage({ params }: { params: Promise<{ i
   return (
     <div className="max-w-[1500px] mx-auto space-y-12 pb-20">
       <nav className="flex justify-between items-center border-b border-slate-100 pb-8">
-        <Link href="/reviewer" className="flex items-center gap-3 text-sm font-bold text-slate-400 hover:text-indigo-600 transition-all">
+        <Link href="/publisher" className="flex items-center gap-3 text-sm font-bold text-slate-400 hover:text-indigo-600 transition-all">
           <span className="text-xl">←</span> Return to Task Queue
         </Link>
         <div className="flex gap-4">

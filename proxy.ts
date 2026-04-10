@@ -25,7 +25,7 @@ export default async function proxy(req: NextRequest) {
   const userRole = (token.role as string).toLowerCase();
 
   // Role-based route protection
-  const roles = ['author', 'reviewer', 'editor', 'admin', 'reader'];
+  const roles = ['author', 'publisher', 'editor', 'admin', 'reader'];
   
   for (const role of roles) {
     if (pathname.startsWith(`/${role}`) && userRole !== role) {
@@ -37,5 +37,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/author/:path*', '/reviewer/:path*', '/editor/:path*', '/admin/:path*', '/reader/:path*', '/login', '/register'],
+  matcher: ['/author/:path*', '/publisher/:path*', '/editor/:path*', '/admin/:path*', '/reader/:path*', '/login', '/register'],
 };

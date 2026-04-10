@@ -92,7 +92,7 @@ export default function AdminDashboard() {
                       className="px-4 py-2 text-[10px] font-black uppercase tracking-widest bg-white border-2 border-black focus:bg-black focus:text-white outline-none transition-all cursor-pointer shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1"
                     >
                        <option value="AUTHOR">AUTHOR</option>
-                       <option value="REVIEWER">REVIEWER</option>
+                       <option value="PUBLISHER">PUBLISHER</option>
                        <option value="EDITOR">EDITOR</option>
                        <option value="ADMIN">ADMIN</option>
                        <option value="READER">READER</option>

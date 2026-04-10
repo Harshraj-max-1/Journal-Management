@@ -9,7 +9,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const session = await getServerSession(authOptions);
   const user = session?.user as any;
 
-  if (!session || (user.role !== 'EDITOR' && user.role !== 'ADMIN' && user.role !== 'REVIEWER' && user.role !== 'AUTHOR')) {
+  if (!session || (user.role !== 'EDITOR' && user.role !== 'ADMIN' && user.role !== 'PUBLISHER' && user.role !== 'AUTHOR')) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
   }
 
@@ -20,7 +20,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         author: { select: { name: true, email: true } },
         reviews: {
           include: {
-            reviewer: { select: { name: true } }
+            publisher: { select: { name: true } }
           }
         }
       }

@@ -7,8 +7,8 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const user = session?.user as any;
   
-  if (!session || user.role !== 'REVIEWER') {
-    return NextResponse.json({ message: "Unauthorized Reviewer Access" }, { status: 403 });
+  if (!session || user.role !== 'PUBLISHER') {
+    return NextResponse.json({ message: "Unauthorized Publisher Access" }, { status: 403 });
   }
 
   try {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         comments,
         rating: parseInt(rating),
         decision,
-        reviewerId: user.id
+        publisherId: user.id
       }
     });
 

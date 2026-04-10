@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <nav className="flex items-center justify-between px-8 py-6 bg-white border-b border-gray-100">
+    <nav className="flex items-center justify-between px-8 py-6 bg-[var(--surface)] border-b border-[var(--card-border)] transition-colors duration-300">
       <div className="flex items-center gap-4">
-        <h1 className="text-xl font-black tracking-tighter uppercase text-black">
+        <h1 className="text-xl font-black tracking-tighter uppercase text-[var(--on-background)] transition-colors duration-300">
           Journal Monolith
         </h1>
+        <div className="ml-4 pl-4 border-l border-[var(--card-border)]">
+          <ThemeToggle />
+        </div>
       </div>
       <div className="flex items-center gap-6">
         {session ? (

@@ -18,13 +18,13 @@ export async function GET(req: Request) {
         where: { authorId: (session.user as any).id },
         orderBy: { createdAt: 'desc' }
       });
-    } else if (role === 'REVIEWER') {
+    } else if (role === 'PUBLISHER') {
       if (view === 'history') {
         // Return papers reviewed by this user
         papers = await prisma.paper.findMany({
           where: {
             reviews: {
-              some: { reviewerId: (session.user as any).id }
+              some: { publisherId: (session.user as any).id }
             }
           },
           include: { author: { select: { name: true } } },
