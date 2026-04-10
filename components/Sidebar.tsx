@@ -39,31 +39,44 @@ export function Sidebar() {
   if (!session) return null;
 
   return (
-    <aside className="w-80 h-screen sticky top-0 bg-[var(--background)] border-r border-[var(--card-border)] flex flex-col p-8 overflow-hidden transition-colors duration-300">
+    <aside className="w-full md:w-80 h-auto md:h-screen relative md:sticky top-0 bg-[var(--background)] border-b md:border-b-0 md:border-r border-[var(--card-border)] flex flex-col p-6 md:p-8 overflow-hidden transition-colors duration-300 z-40">
       {/* Brand Header */}
-      <div className="flex items-center gap-4 mb-12">
-         <div className="w-12 h-12 bg-[var(--primary)] rounded-2xl shadow-xl shadow-[var(--primary)]/20 flex items-center justify-center text-white font-black text-xl italic">J</div>
-         <div>
-            <h1 className="text-lg font-black tracking-tight leading-none text-[var(--on-background)] uppercase transition-colors duration-300">JournalPlatform</h1>
-            <span className="text-[10px] font-black uppercase tracking-widest text-[var(--primary)] opacity-60">System v2.0</span>
+      <div className="flex items-center justify-between md:justify-start gap-4 mb-8 md:mb-12">
+         <div className="flex items-center gap-4">
+           <svg className="w-10 h-10 md:w-12 md:h-12 shrink-0 select-none drop-shadow-[0_0_10px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <defs>
+               <linearGradient id="cyber-glow-sidebar" x1="0%" y1="0%" x2="100%" y2="100%">
+                 <stop offset="0%" stopColor="var(--primary)" />
+                 <stop offset="100%" stopColor="var(--secondary)" />
+               </linearGradient>
+             </defs>
+             <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" stroke="url(#cyber-glow-sidebar)" strokeWidth="6" fill="url(#cyber-glow-sidebar)" fillOpacity="0.15" />
+             <path d="M50 18 L75 30 L75 70 L50 82 L25 70 L25 30 Z" stroke="var(--primary)" strokeWidth="3" fill="var(--background)" fillOpacity="0.5" />
+             <path d="M60 35 V55 C60 65 40 65 40 55" stroke="url(#cyber-glow-sidebar)" strokeWidth="8" strokeLinecap="round" />
+             <path d="M40 35 H70" stroke="url(#cyber-glow-sidebar)" strokeWidth="8" strokeLinecap="round" />
+           </svg>
+           <div>
+              <h1 className="text-base md:text-lg font-black tracking-tight leading-none text-[var(--on-background)] uppercase transition-colors duration-300">JournalPlatform</h1>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--primary)] opacity-60">System v2.0</span>
+           </div>
          </div>
       </div>
 
       {/* Nav Section */}
-      <nav className="flex-1 space-y-2">
-        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 block mb-4 ml-2">Main Navigation</span>
+      <nav className="flex-1 flex flex-row md:flex-col overflow-x-auto overflow-y-hidden md:overflow-visible gap-2 md:gap-0 space-y-0 md:space-y-2 pb-4 md:pb-0 scrollbar-hide">
+        <span className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4 ml-2">Main Navigation</span>
         {getLinks().map(link => (
           <Link 
             key={link.label} 
             href={link.href} 
-            className={`flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all group ${
+            className={`flex items-center gap-2 md:gap-4 px-4 md:px-6 py-3 md:py-4 rounded-2xl font-bold transition-all group shrink-0 ${
               pathname === link.href 
                 ? "bg-[var(--primary)] text-white shadow-xl shadow-[var(--primary)]/20" 
-                : "text-slate-500 hover:bg-[var(--surface)] hover:text-[var(--primary)] hover:shadow-sm"
+                : "text-slate-500 hover:bg-[var(--surface)] hover:text-[var(--primary)] hover:shadow-sm border border-transparent hover:border-[var(--card-border)]"
             }`}
           >
-            <span className={`text-lg transition-transform group-hover:scale-110 ${pathname === link.href ? "opacity-100" : "opacity-40"}`}>{link.icon}</span>
-            <span className="text-sm tracking-tight">{link.label}</span>
+            <span className={`text-base md:text-lg transition-transform group-hover:scale-110 ${pathname === link.href ? "opacity-100" : "opacity-40"}`}>{link.icon}</span>
+            <span className="text-xs md:text-sm tracking-tight">{link.label}</span>
           </Link>
         ))}
       </nav>

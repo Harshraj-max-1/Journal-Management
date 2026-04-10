@@ -107,7 +107,7 @@ export default function ReaderGallery() {
            <span>Global Research Hub</span>
         </div>
         <div className="flex gap-12 items-center">
-           <span className="text-[10px] font-bold text-slate-300 tracking-widest uppercase">© 2025 Journal Monolith System v2.0</span>
+           <span className="text-[10px] font-bold text-slate-300 tracking-widest uppercase">© 2026 Journal Monolith System v2.0</span>
         </div>
       </footer>
 
