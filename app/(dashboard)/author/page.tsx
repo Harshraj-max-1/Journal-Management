@@ -4,6 +4,19 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { PDFModal } from "@/components/PDFModal";
+import { 
+  Plus, 
+  BookOpen, 
+  History, 
+  Clock, 
+  CheckCircle2, 
+  AlertCircle, 
+  ExternalLink,
+  Layers,
+  Search,
+  Zap,
+  ArrowRight
+} from "lucide-react";
 
 interface Paper {
   id: string;
@@ -25,88 +38,143 @@ export default function AuthorDashboard() {
       .then((data) => {
         if (Array.isArray(data)) setPapers(data);
         setLoading(false);
-        gsap.fromTo(".paper-card", 
-          { opacity: 0, y: 30, scale: 0.95 }, 
-          { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.1, ease: "power4.out" }
+        gsap.fromTo(".paper-row", 
+          { opacity: 0, x: -20 }, 
+          { opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
         );
       })
       .catch(() => setLoading(false));
 
     gsap.fromTo(headerRef.current, 
-      { opacity: 0, x: -20 }, 
-      { opacity: 1, x: 0, duration: 1, ease: "power2.out" }
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
     );
   }, []);
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PUBLISHED': return 'text-[var(--primary)] bg-[var(--primary)]/10 border-[var(--primary)]/20';
+      case 'ACCEPTED': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
+      case 'REJECTED': return 'text-rose-500 bg-rose-500/10 border-rose-500/20';
+      default: return 'text-slate-500 bg-slate-500/10 border-slate-500/20';
+    }
+  };
+
+  const getJourneyStep = (status: string) => {
+    const steps = ['SUBMITTED', 'UNDER_REVIEW', 'ACCEPTED', 'PUBLISHED'];
+    return steps.indexOf(status);
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-[50vh]">
-        <div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+        <div className="w-12 h-12 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--primary)] animate-pulse">Syncing Archive</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-12 max-w-5xl mx-auto">
-      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6">
-        <div>
-          <span className="text-xs font-black uppercase tracking-widest text-indigo-500 mb-2 block">Manuscript Repository</span>
-          <h1 className="text-6xl font-extrabold tracking-tight text-slate-900">Archives</h1>
-          <p className="text-slate-400 font-medium text-lg italic mt-2">Personal collection of research contributions.</p>
+    <div className="space-y-16 max-w-7xl mx-auto px-6 md:px-0">
+      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 border-b border-[var(--primary)]/10 pb-16">
+        <div className="space-y-6">
+          <div className="flex items-center gap-4 text-[var(--primary)]">
+             <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center">
+                <Layers className="w-4 h-4" />
+             </div>
+             <span className="text-[10px] font-black uppercase tracking-[0.5em] opacity-70">Institutional Node 0x7F</span>
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-[var(--on-background)] leading-none uppercase">
+            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">Manifests</span>
+          </h1>
+          <p className="text-slate-500 font-bold text-xl leading-relaxed max-w-2xl opacity-80">
+            A computationally advanced registry for your scientific contributions and their sovereign archival journey.
+          </p>
         </div>
         <Link 
           href="/author/submit" 
-          className="px-10 py-5 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-3 group"
+          className="btn-primary group !px-12 !py-6 shadow-[0_15px_35px_rgba(0,242,254,0.2)]"
         >
-          Submit Manuscript 
-          <span className="text-xl group-hover:translate-x-1 transition-transform">→</span>
+          <Plus className="w-5 h-5" />
+          Archive Protocol
         </Link>
       </header>
 
       {papers.length === 0 ? (
-        <section className="bg-white p-24 rounded-[40px] shadow-sm border-2 border-dashed border-slate-100 text-center space-y-8">
-          <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-4xl">📚</div>
-          <div className="max-w-md mx-auto space-y-4">
-             <h3 className="text-2xl font-bold tracking-tight">Archive Empty</h3>
-             <p className="text-slate-400 font-medium leading-relaxed">No manuscripts have been archived yet. Begin your academic contribution by submitting your first research paper.</p>
-             <Link href="/author/submit" className="text-indigo-600 font-bold hover:underline underline-offset-8">Draft New Submission</Link>
+        <section className="cyber-container p-20 md:p-32 text-center space-y-10 group">
+          <div className="relative inline-block">
+             <div className="w-28 h-28 bg-slate-900/50 border border-white/5 rounded-[32px] flex items-center justify-center mx-auto text-[var(--primary)] shadow-[0_0_30px_rgba(0,242,254,0.1)] group-hover:shadow-[0_0_50px_rgba(0,242,254,0.2)] transition-all duration-1000">
+                <BookOpen className="w-12 h-12" />
+             </div>
+             <div className="absolute inset-0 bg-[var(--primary)]/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div className="max-w-xl mx-auto space-y-6">
+             <h3 className="text-3xl font-black tracking-tight uppercase">Contribution Gap Detected</h3>
+             <p className="text-slate-500 font-medium text-lg leading-relaxed opacity-80">The scientific collective awaits your discovery. Register your first submission to begin the peer-review metadata verification.</p>
+             <Link href="/author/submit" className="inline-flex items-center gap-4 text-[var(--primary)] font-black uppercase tracking-widest text-[10px] hover:gap-6 transition-all border-b-2 border-transparent hover:border-[var(--primary)]/30 pb-2">
+               Draft Submission Protocol <ArrowRight className="w-4 h-4" />
+             </Link>
           </div>
         </section>
       ) : (
-        <div className="flex flex-col gap-6">
-          <div className="grid grid-cols-12 px-8 text-[11px] font-black uppercase tracking-widest text-slate-300">
-            <div className="col-span-12 md:col-span-6">Scientific Title</div>
-            <div className="hidden md:block md:col-span-3 text-center">Current Status</div>
-            <div className="hidden md:block md:col-span-3 text-right">Submission Date</div>
+        <div className="flex flex-col gap-8">
+          <div className="grid grid-cols-12 px-10 text-[10px] font-black uppercase tracking-[0.5em] text-slate-500 opacity-50">
+            <div className="col-span-12 lg:col-span-6">Manuscript Payload</div>
+            <div className="hidden lg:block lg:col-span-4 text-center">Lifecycle Progress</div>
+            <div className="hidden lg:block lg:col-span-2 text-right">Archival Stamp</div>
           </div>
           
-          {papers.map((paper) => (
-            <div 
-              key={paper.id} 
-              onClick={() => setSelectedPaper(paper)}
-              className="paper-card grid grid-cols-12 items-center p-10 bg-white rounded-[32px] shadow-sm border border-slate-50 hover:shadow-2xl hover:border-indigo-100 transition-all group lg:-translate-x-0 cursor-pointer"
-            >
-              <div className="col-span-12 md:col-span-6 space-y-1">
-                <h3 className="text-2xl font-extrabold tracking-tight text-slate-800 transition-colors group-hover:text-indigo-600 leading-tight mb-2">
-                  {paper.title}
-                </h3>
-                <span className="inline-block px-3 py-1 bg-slate-50 text-[10px] font-bold text-slate-400 rounded-lg group-hover:bg-indigo-50 group-hover:text-indigo-400">ID-TRCK-#{paper.id}</span>
+          {papers.map((paper) => {
+            const currentStep = getJourneyStep(paper.status);
+            return (
+              <div 
+                key={paper.id} 
+                onClick={() => setSelectedPaper(paper)}
+                className="paper-row grid grid-cols-12 items-center p-10 md:p-12 glass rounded-[48px] border border-white/5 hover:border-[var(--primary)]/40 hover:shadow-[0_40px_80px_-20px_rgba(0,242,254,0.15)] transition-all duration-700 group cursor-pointer relative overflow-hidden"
+              >
+                <div className="col-span-12 lg:col-span-6 space-y-6">
+                  <div className="flex items-center gap-4">
+                     <span className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border ${getStatusColor(paper.status)} shadow-sm`}>
+                       {paper.status.replace('_', ' ')}
+                     </span>
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-40">NODE_ID: {paper.id.slice(-8)}</span>
+                  </div>
+                  <h3 className="text-3xl font-black tracking-tighter text-[var(--on-background)] leading-[1.1] transition-colors group-hover:text-[var(--primary)]">
+                    {paper.title}
+                  </h3>
+                  <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                     <span className="flex items-center gap-2 group-hover:text-slate-300 transition-colors"><Clock className="w-4 h-4 opacity-40" /> Updated-T:12D</span>
+                     <span className="flex items-center gap-2 group-hover:text-[var(--primary)] transition-colors"><ExternalLink className="w-4 h-4 opacity-40" /> Login Manifesto</span>
+                  </div>
+                </div>
+
+                {/* Journey Timeline View */}
+                <div className="hidden lg:flex col-span-4 justify-center px-12">
+                   <div className="flex items-center w-full max-w-[300px] relative">
+                      {[0, 1, 2, 3].map((step) => (
+                        <div key={step} className="flex-1 flex items-center relative">
+                           <div className={`w-4 h-4 rounded-lg border-2 z-10 transition-all duration-1000 ${
+                             step <= currentStep ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_15px_rgba(0,242,254,0.6)]' : 'bg-slate-900 border-white/10'
+                           }`}></div>
+                           {step < 3 && (
+                             <div className={`h-[1px] w-full absolute left-4 transition-all duration-1000 ${
+                               step < currentStep ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/50' : 'bg-white/5'
+                             }`}></div>
+                           )}
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="col-span-12 lg:col-span-2 text-right font-black text-slate-500 tabular-nums text-xs mt-8 lg:mt-0 tracking-widest uppercase">
+                   {new Date(paper.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </div>
+
+                {/* Hover Aura */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/10 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
               </div>
-              <div className="col-span-6 md:col-span-3 flex justify-start md:justify-center mt-6 md:mt-0">
-                <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm ${
-                  paper.status === 'ACCEPTED' ? 'bg-emerald-50 text-emerald-600' : 
-                  paper.status === 'REJECTED' ? 'bg-rose-50 text-rose-600' : 
-                  paper.status === 'PUBLISHED' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' :
-                  'bg-indigo-50 text-indigo-600'
-                }`}>
-                  {paper.status.replace('_', ' ')}
-                </span>
-              </div>
-              <div className="col-span-6 md:col-span-3 text-right font-bold text-slate-400 tabular-nums text-sm mt-6 md:mt-0">
-                 {new Date(paper.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   const user = session?.user as any;
   
   if (!session || user.role !== 'PUBLISHER') {
-    return NextResponse.json({ message: "Unauthorized Publisher Access" }, { status: 403 });
+    return NextResponse.json({ message: "Unauthorized Publisher Login" }, { status: 403 });
   }
 
   try {

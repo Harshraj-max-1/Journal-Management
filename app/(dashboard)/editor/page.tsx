@@ -3,6 +3,19 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { 
+  PenTool, 
+  Send, 
+  CheckCircle2, 
+  XCircle, 
+  BarChart3, 
+  Zap, 
+  ArrowRight, 
+  Clock, 
+  AlertCircle,
+  Activity,
+  User
+} from "lucide-react";
 
 export default function EditorDashboard() {
   const [papers, setPapers] = useState<any[]>([]);
@@ -15,16 +28,16 @@ export default function EditorDashboard() {
       .then((data) => {
         if (Array.isArray(data)) setPapers(data);
         setLoading(false);
-        gsap.fromTo(".editor-card", 
-          { opacity: 0, y: 30, scale: 0.95 }, 
-          { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.1, ease: "power4.out" }
+        gsap.fromTo(".editor-row", 
+          { opacity: 0, y: 20 }, 
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
         );
       })
       .catch(() => setLoading(false));
 
     gsap.fromTo(headerRef.current, 
-      { opacity: 0, x: -20 }, 
-      { opacity: 1, x: 0, duration: 1, ease: "power2.out" }
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
     );
   }, []);
 
@@ -43,62 +56,91 @@ export default function EditorDashboard() {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-[50vh]"><div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div></div>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+        <div className="w-12 h-12 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--primary)] animate-pulse">Initializing Board</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto">
-      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-100">
-        <div>
-          <span className="text-xs font-black uppercase tracking-widest text-indigo-500 mb-2 block">Editorial Board</span>
-          <h1 className="text-6xl font-extrabold tracking-tight text-slate-900 leading-none">Manuscript Queue</h1>
-          <p className="text-slate-400 font-medium text-lg italic mt-4 max-w-md">Oversee scientific integrity and editorial refinements.</p>
+    <div className="space-y-12 max-w-6xl mx-auto px-4 md:px-0">
+      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-12 border-b border-[var(--card-border)]">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 text-[var(--primary)]">
+             <PenTool className="w-5 h-5" />
+             <span className="text-xs font-bold uppercase tracking-[0.3em]">Editorial Command Board</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[var(--on-background)] leading-none">The <span className="text-slate-400">Queue</span></h1>
+          <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-xl">
+            Oversee scientific integrity, institutional coordination, and peer-review distribution.
+          </p>
         </div>
+        
         <div className="flex gap-4">
-           <div className="bg-white px-8 py-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Total Entries</span>
-              <span className="text-2xl font-black text-indigo-600 tabular-nums">{papers.length}</span>
+           <div className="bg-[var(--surface)] p-6 rounded-[32px] border border-[var(--card-border)] shadow-sm flex items-center gap-6 min-w-[200px]">
+              <div className="w-12 h-12 bg-[var(--primary)]/10 text-[var(--primary)] rounded-2xl flex items-center justify-center">
+                 <Activity className="w-5 h-5" />
+              </div>
+              <div>
+                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Under Review</p>
+                 <span className="text-3xl font-bold text-[var(--on-background)] tabular-nums">{papers.filter(p => p.status === 'UNDER_REVIEW').length}</span>
+              </div>
            </div>
         </div>
       </header>
 
-      <section className="grid gap-6">
+      <section className="flex flex-col gap-6">
         {papers.map((paper) => (
-          <div key={paper.id} className="editor-card group bg-white p-10 rounded-[40px] shadow-sm border border-slate-50 flex flex-col lg:flex-row justify-between items-center hover:shadow-2xl hover:border-indigo-100 transition-all cursor-default overflow-hidden relative">
-            <div className="flex-1 pr-12 space-y-4">
-              <div className="flex items-center gap-4">
-                 <span className="px-3 py-1 bg-slate-50 text-[10px] font-bold text-slate-400 rounded-lg group-hover:bg-indigo-50 group-hover:text-indigo-400 transition-colors uppercase tracking-widest">SUB-ID-#{paper.id}</span>
-                 <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${
-                    paper.status === 'ACCEPTED' ? 'bg-emerald-50 text-emerald-600' : 
-                    paper.status === 'REJECTED' ? 'bg-rose-50 text-rose-600' : 
-                    'bg-indigo-50 text-indigo-600'
+          <div key={paper.id} className="editor-row group p-8 md:p-10 bg-[var(--surface)] rounded-[40px] border border-[var(--card-border)] hover:border-[var(--primary)]/30 transition-all duration-500 flex flex-col xl:flex-row justify-between items-center relative overflow-hidden h-full lg:h-auto">
+            <div className="flex-1 w-full xl:pr-12 space-y-6">
+              <div className="flex items-center flex-wrap gap-4">
+                 <span className="px-4 py-1.5 bg-slate-50 dark:bg-slate-900 text-[10px] font-bold text-slate-400 rounded-full border border-[var(--card-border)] group-hover:bg-[var(--primary)]/5 group-hover:text-[var(--primary)] transition-colors uppercase tracking-widest">SUB-#{paper.id.slice(-8)}</span>
+                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+                    paper.status === 'ACCEPTED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 
+                    paper.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 
+                    'bg-[var(--primary)]/10 text-[var(--primary)] border-[var(--primary)]/20'
                   }`}>
                     {paper.status.replace('_', ' ')}
                   </span>
               </div>
-              <h3 className="text-3xl font-extrabold tracking-tight text-slate-800 leading-tight transition-colors group-hover:text-indigo-600">{paper.title}</h3>
-              <p className="text-slate-400 font-medium italic line-clamp-2 max-w-2xl leading-relaxed">"{paper.abstract}"</p>
+              <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)] leading-tight group-hover:text-[var(--primary)] transition-colors">{paper.title}</h3>
+              <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
+                 <span className="flex items-center gap-1.5"><User className="w-4 h-4" /> {paper.author.name}</span>
+                 <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> Initiated {new Date(paper.createdAt).toLocaleDateString()}</span>
+              </div>
             </div>
             
-            <div className="flex flex-wrap lg:flex-nowrap items-center gap-4 mt-8 lg:mt-0 pt-8 lg:pt-0 border-t border-slate-50 lg:border-t-0 w-full lg:w-auto">
+            <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 mt-8 xl:mt-0 pt-8 xl:pt-0 border-t border-[var(--card-border)] xl:border-t-0 w-full xl:w-auto">
               <Link 
                 href={`/editor/paper/${paper.id}`}
-                className="flex-1 lg:flex-none px-8 py-5 bg-white text-slate-900 border-2 border-slate-100 rounded-2xl font-bold text-xs uppercase tracking-widest hover:border-indigo-600 hover:text-indigo-600 transition-all text-center"
+                className="flex-1 xl:flex-none btn-secondary !px-8 !py-4 !text-[10px] !tracking-widest"
               >
-                Refine
+                Launch Analysis
               </Link>
               <button 
                 onClick={() => updateStatus(paper.id, 'UNDER_REVIEW')}
-                className="flex-1 lg:flex-none px-8 py-5 bg-indigo-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 active:scale-95 transition-all text-center"
+                className="flex-1 xl:flex-none btn-primary !px-8 !py-4 shadow-xl !text-[10px] !tracking-widest"
               >
-                Distribute
+                Distribute Study
               </button>
             </div>
+
+            {/* Subtle Gradient Glow */}
+            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[var(--primary)]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
         ))}
         {papers.length === 0 && (
-          <div className="p-32 text-center bg-white rounded-[40px] border-4 border-dashed border-slate-100 flex flex-col items-center gap-6">
-             <div className="text-5xl grayscale opacity-20">🗄️</div>
-             <h3 className="text-2xl font-bold italic text-slate-300">The Editorial queue is currently in silent phase.</h3>
+          <div className="py-32 text-center bg-[var(--surface)] border-2 border-dashed border-[var(--card-border)] rounded-[48px] flex flex-col items-center gap-8 group">
+             <div className="w-20 h-20 bg-slate-50 dark:bg-slate-900 border border-[var(--card-border)] rounded-full flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-10 h-10 opacity-30" />
+             </div>
+             <div className="space-y-4">
+                <h3 className="text-2xl font-bold tracking-tight text-slate-300 uppercase italic">Board Inactive</h3>
+                <p className="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">All manuscripts have been processed. The board is on standby for the next submission cycle.</p>
+             </div>
           </div>
         )}
       </section>

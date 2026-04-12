@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   
   if (!session || (session.user as any).role !== 'ADMIN') {
-    return NextResponse.json({ message: "Unauthorized Admin Access" }, { status: 403 });
+    return NextResponse.json({ message: "Unauthorized Admin Login" }, { status: 403 });
   }
 
   try {
@@ -32,7 +32,7 @@ export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   
   if (!session || (session.user as any).role !== 'ADMIN') {
-    return NextResponse.json({ message: "Unauthorized Admin Access" }, { status: 403 });
+    return NextResponse.json({ message: "Unauthorized Admin Login" }, { status: 403 });
   }
 
   try {

@@ -2,41 +2,44 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { LogIn, Zap, UserPlus } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <nav className="flex items-center justify-between px-4 md:px-8 py-4 md:py-6 bg-[var(--surface)] border-b border-[var(--card-border)] transition-colors duration-300">
-      <div className="flex items-center gap-2 md:gap-4">
-        <h1 className="text-base md:text-xl font-black tracking-tighter uppercase text-[var(--on-background)] transition-colors duration-300">
-          Journal Monolith
-        </h1>
-        <div className="ml-2 pl-2 md:ml-4 md:pl-4 border-l border-[var(--card-border)]">
+    <nav className="flex items-center justify-between px-6 md:px-12 py-4 md:py-6 bg-[var(--surface)]/40 backdrop-blur-3xl border-b border-[var(--primary)]/10 sticky top-0 z-50 transition-all duration-700">
+      <div className="flex items-center gap-4">
+        <Link href="/" className="group flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-white shadow-[0_0_20px_rgba(0,242,254,0.3)] group-hover:shadow-[0_0_30px_rgba(0,242,254,0.5)] group-hover:rotate-6 transition-all duration-500">
+             <Zap className="w-5 h-5 fill-current" />
+          </div>
+          <h1 className="text-xl md:text-3xl font-black tracking-tighter text-[var(--on-background)] group-hover:text-[var(--primary)] transition-colors">
+            Monolith<span className="font-thin opacity-30 ml-1">Protocol</span>
+          </h1>
+        </Link>
+        <div className="ml-4 pl-4 border-l border-[var(--card-border)] hidden sm:block">
           <ThemeToggle />
         </div>
       </div>
-      <div className="flex items-center gap-4 md:gap-6">
+
+      <div className="flex items-center gap-4 md:gap-8">
         {session ? (
-          <>
-            <span className="text-sm font-medium text-gray-500 hidden md:block">
-              {session.user?.name} ({session.user?.role})
-            </span>
-            <button
-              onClick={() => signOut({ callbackUrl: "/login" })}
-              className="px-5 py-2 text-sm font-bold text-white bg-black hover:bg-gray-800 transition-colors"
-            >
-              Sign Out
-            </button>
-          </>
-        ) : (
           <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-bold text-gray-400 hover:text-black transition-colors">
-              Log In
+            <div className="hidden lg:flex flex-col items-end">
+              <span className="text-xs font-black text-[var(--on-background)] tracking-tight">{session.user?.name}</span>
+              <span className="text-[9px] uppercase tracking-[0.3em] text-[var(--primary)] font-black opacity-80">{session.user?.role}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 md:gap-6">
+            <Link href="/login" className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-black text-slate-500 hover:text-[var(--primary)] transition-colors">
+              <LogIn className="w-4 h-4" />
+              Login
             </Link>
-            <Link href="/register" className="px-5 py-2 text-sm font-bold text-white bg-black hover:bg-gray-800 transition-colors">
-              Join Now
+            <Link href="/register" className="btn-primary !px-6 !py-3 !rounded-xl">
+              Register
             </Link>
           </div>
         )}

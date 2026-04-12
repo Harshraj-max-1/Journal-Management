@@ -3,6 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { 
+  Scale, 
+  User, 
+  FileCheck, 
+  Clock, 
+  ArrowRight, 
+  DraftingCompass,
+  Zap,
+  CheckCircle2,
+  FileText
+} from "lucide-react";
 
 export default function PublisherDashboard() {
   const [papers, setPapers] = useState<any[]>([]);
@@ -15,9 +26,9 @@ export default function PublisherDashboard() {
       .then((data) => {
         if (Array.isArray(data)) setPapers(data);
         setLoading(false);
-        gsap.fromTo(".publisher-card", 
-          { opacity: 0, scale: 0.9, y: 40 }, 
-          { opacity: 1, scale: 1, y: 0, duration: 1.2, stagger: 0.1, ease: "back.out(1.7)" }
+        gsap.fromTo(".publisher-row", 
+          { opacity: 0, y: 20 }, 
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
         );
       })
       .catch(() => setLoading(false));
@@ -28,51 +39,75 @@ export default function PublisherDashboard() {
     );
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center h-[50vh]"><div className="w-12 h-12 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div></div>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
+        <div className="w-12 h-12 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--primary)] animate-pulse">Initializing Queue</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col gap-16 max-w-6xl mx-auto">
-      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-10 border-b border-slate-100">
-        <div className="space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500 mb-4 block leading-none">Scientific Evaluation Hub</span>
-          <h1 className="text-7xl font-extrabold tracking-tighter text-slate-900 leading-[0.8] mb-4">Publisher Queue</h1>
-          <p className="text-slate-400 font-medium text-xl italic max-w-md">Critical validation and technical critique workspace.</p>
+    <div className="flex flex-col gap-12 max-w-6xl mx-auto px-4 md:px-0">
+      <header ref={headerRef} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-12 border-b border-[var(--card-border)]">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 text-[var(--primary)]">
+             <Scale className="w-5 h-5" />
+             <span className="text-xs font-bold uppercase tracking-[0.3em]">Validation Command Center</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-[var(--on-background)]">The <span className="text-slate-400">Queue</span></h1>
+          <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-md">Technical evaluation and institutional critique workspace.</p>
         </div>
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 text-right">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Active Assignments</span>
-          <p className="text-5xl font-extrabold tracking-tight text-indigo-600 leading-none">{papers.length}</p>
+        
+        <div className="bg-[var(--surface)] p-6 md:p-8 rounded-[32px] border border-[var(--card-border)] shadow-sm flex items-center gap-6 min-w-[240px] hover:border-[var(--primary)]/30 transition-all">
+           <div className="w-14 h-14 bg-[var(--primary)]/10 text-[var(--primary)] rounded-2xl flex items-center justify-center">
+              <Zap className="w-6 h-6 fill-current" />
+           </div>
+           <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Active Pipeline</p>
+              <p className="text-4xl font-bold tracking-tight text-[var(--on-background)] leading-none">{papers.length}</p>
+           </div>
         </div>
       </header>
 
-      <section className="grid gap-10">
+      <section className="flex flex-col gap-6">
         {papers.map((paper) => (
-          <div key={paper.id} className="publisher-card group w-full bg-white p-12 rounded-[48px] shadow-sm border border-slate-50 flex flex-col md:flex-row justify-between items-center hover:shadow-2xl hover:border-indigo-100 transition-all cursor-default">
-            <div className="flex-1 pr-12 space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="flex px-3 py-1 bg-indigo-50 text-[10px] font-black uppercase tracking-widest text-indigo-400 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">Assignee: {paper.author.name}</div>
-                <div className="text-[10px] font-bold text-slate-300 tracking-widest uppercase">TRCK-#{paper.id}</div>
+          <div key={paper.id} className="publisher-row group p-8 md:p-10 bg-[var(--surface)] rounded-[40px] border border-[var(--card-border)] hover:border-[var(--primary)]/30 transition-all duration-500 flex flex-col md:flex-row justify-between items-center hover:shadow-2xl hover:shadow-black/5">
+            <div className="flex-1 w-full md:pr-12 space-y-6">
+              <div className="flex items-center flex-wrap gap-4">
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-[var(--primary)]/5 text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] rounded-full border border-[var(--primary)]/20">
+                   <User className="w-3.5 h-3.5" />
+                   {paper.author.name}
+                </div>
+                <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">ID: {paper.id.slice(-8)}</div>
               </div>
-              <h3 className="text-4xl font-extrabold tracking-tight text-slate-800 leading-none group-hover:text-indigo-600 transition-colors">{paper.title}</h3>
-              <p className="text-slate-400 group-hover:text-slate-500 font-medium text-lg leading-relaxed line-clamp-2 italic">"{paper.abstract}"</p>
+              <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)] leading-tight group-hover:text-[var(--primary)] transition-colors">
+                {paper.title}
+              </h3>
+              <p className="text-slate-500 font-medium text-lg leading-relaxed line-clamp-2 italic">"{paper.abstract}"</p>
             </div>
             
-            <div className="flex flex-col items-end gap-8 mt-12 md:mt-0 w-full md:w-auto">
+            <div className="mt-8 md:mt-0 w-full md:w-auto self-end md:self-center">
                <Link 
                 href={`/publisher/review/${paper.id}`}
-                className="w-full md:w-auto px-12 py-6 bg-indigo-600 text-white rounded-3xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-4 group"
+                className="btn-primary !px-10 !py-5 shadow-xl group"
               >
-                Evaluate
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                Launch Protocol
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
         ))}
+        
         {papers.length === 0 && (
-          <div className="p-32 text-center bg-white rounded-[48px] border-4 border-dashed border-slate-50 flex flex-col items-center gap-8 group">
-             <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-5xl group-hover:scale-110 transition-transform">✅</div>
+          <div className="py-32 text-center bg-[var(--surface)] rounded-[48px] border-2 border-dashed border-[var(--card-border)] flex flex-col items-center gap-8 group">
+             <div className="w-20 h-20 bg-[var(--primary)]/5 border border-[var(--primary)]/10 text-[var(--primary)] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                <CheckCircle2 className="w-10 h-10" />
+             </div>
              <div className="space-y-4">
-                <h3 className="text-2xl font-bold tracking-tight text-slate-400 uppercase italic">Pipeline Complete</h3>
-                <p className="text-slate-300 font-medium text-sm leading-relaxed max-w-xs mx-auto">No pending manuscripts in your evaluation queue at this time.</p>
+                <h3 className="text-2xl font-bold tracking-tight">System Optimized</h3>
+                <p className="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">Zero pending manuscripts in your evaluation queue. Pipeline is at peak efficiency.</p>
              </div>
           </div>
         )}

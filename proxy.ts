@@ -7,9 +7,9 @@ export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Paths that require no authentication
-  if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/api/auth')) {
+  if (pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/api/auth')) {
     if (token) {
-      // If authenticating and trying to access login/register, redirect to dynamic dashboard
+      // Automatic redirection to role dashboard
       return NextResponse.redirect(new URL(`/${(token.role as string).toLowerCase()}`, req.url));
     }
     return NextResponse.next();
@@ -37,5 +37,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/author/:path*', '/publisher/:path*', '/editor/:path*', '/admin/:path*', '/reader/:path*', '/login', '/register'],
+  matcher: ['/', '/author/:path*', '/publisher/:path*', '/editor/:path*', '/admin/:path*', '/reader/:path*', '/login', '/register'],
 };

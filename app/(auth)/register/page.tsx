@@ -70,7 +70,7 @@ export default function RegisterPage() {
              <path d="M40 35 H70" stroke="url(#cyber-glow-register)" strokeWidth="8" strokeLinecap="round" />
            </svg>
            <h2 className="text-4xl font-extrabold tracking-tight text-[var(--on-background)] leading-none transition-colors duration-300">Manuscript Identity</h2>
-           <p className="text-slate-400 font-medium text-sm">Initialize your application to the scientific collective.</p>
+           <p className="text-slate-400 font-medium text-sm">Register your application to the scientific collective.</p>
         </header>
 
         {error && (
@@ -117,7 +117,7 @@ export default function RegisterPage() {
                 <option value="AUTHOR">Author (Contributor)</option>
                 <option value="PUBLISHER">Publisher (Evaluator)</option>
                 <option value="EDITOR">Editor (Directive)</option>
-                <option value="READER">Reader (Public Access)</option>
+                <option value="READER">Reader (Public Login)</option>
               </select>
               <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--primary)] font-bold">▾</div>
             </div>
@@ -126,15 +126,15 @@ export default function RegisterPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="col-span-1 md:col-span-2 py-4 md:py-6 bg-[var(--primary)] text-white font-black uppercase tracking-widest text-xs rounded-3xl shadow-2xl hover:-translate-y-1 active:scale-95 transition-all text-center flex items-center justify-center gap-3 disabled:opacity-70 disabled:hover:translate-y-0"
+            className="btn-primary col-span-1 md:col-span-2 py-4 md:py-6 !rounded-3xl shadow-2xl w-full text-center disabled:opacity-70 disabled:hover:translate-y-0"
           >
-            {loading ? "INITIALIZING..." : "FINALIZE APPLICATION →"}
+            {loading ? "REGISTERING..." : "SUBMIT →"}
           </button>
         </form>
 
         <footer className="mt-12 pt-8 border-t border-[var(--card-border)] text-center transition-colors duration-300">
           <p className="text-xs font-bold text-slate-400">
-            Already verified? <Link href="/login" className="text-[var(--primary)] hover:underline underline-offset-4">Identity Check-In</Link>
+            Already verified? <Link href="/login" className="text-[var(--primary)] hover:underline underline-offset-4">Identity Login</Link>
           </p>
         </footer>
       </div>

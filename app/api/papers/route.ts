@@ -63,18 +63,19 @@ export async function POST(req: Request) {
   const user = session?.user as any;
   
   if (!session || user.role !== 'AUTHOR') {
-     return NextResponse.json({ message: "Unauthorized Author Access" }, { status: 403 });
+     return NextResponse.json({ message: "Unauthorized Author Login" }, { status: 403 });
   }
 
   try {
     const body = await req.json();
-    const { originalTitle, originalAbstract, originalFileUrl } = body;
+    const { originalTitle, originalAbstract, originalFileUrl, coAuthors } = body;
 
     const paper = await prisma.paper.create({
       data: {
         originalTitle,
         originalAbstract,
         originalFileUrl,
+        coAuthors: coAuthors || [],
         // Sync with primary display fields initially
         title: originalTitle,
         abstract: originalAbstract,

@@ -135,7 +135,7 @@ export default function EditorMarkupPage({ params }: { params: Promise<{ id: str
                   onClick={() => setIsEditing(!isEditing)}
                   className="px-4 py-2 rounded-xl bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all transition-colors"
                 >
-                  {isEditing ? "Cancel Markup" : "Initialize Markup"}
+                  {isEditing ? "Cancel Markup" : "Register Markup"}
                 </button>
               </div>
 

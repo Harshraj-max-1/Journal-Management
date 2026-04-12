@@ -4,10 +4,22 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getCloudinarySignature } from "@/lib/cloudinary";
 import gsap from "gsap";
+import { 
+  FileUp, 
+  Users, 
+  Plus, 
+  X, 
+  ArrowRight, 
+  FileText, 
+  Sparkles,
+  CheckCircle2
+} from "lucide-react";
 
 export default function SubmitResearch() {
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
+  const [coAuthors, setCoAuthors] = useState<string[]>([]);
+  const [newCoAuthor, setNewCoAuthor] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
@@ -28,10 +40,21 @@ export default function SubmitResearch() {
     );
   }, []);
 
+  const addCoAuthor = () => {
+    if (newCoAuthor && !coAuthors.includes(newCoAuthor)) {
+      setCoAuthors([...coAuthors, newCoAuthor]);
+      setNewCoAuthor("");
+    }
+  };
+
+  const removeCoAuthor = (name: string) => {
+    setCoAuthors(coAuthors.filter(a => a !== name));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      setMessage("Please select a valid PDF manuscript first.");
+      setMessage("Manuscript file required for archival.");
       return;
     }
     setUploading(true);
@@ -59,7 +82,8 @@ export default function SubmitResearch() {
         body: JSON.stringify({ 
           originalTitle: title, 
           originalAbstract: abstract, 
-          originalFileUrl: cloudinaryData.secure_url
+          originalFileUrl: cloudinaryData.secure_url,
+          coAuthors
         }),
       });
 
@@ -77,50 +101,88 @@ export default function SubmitResearch() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-6 min-h-screen">
-      <header ref={headerRef} className="mb-20 space-y-4">
-        <span className="text-xs font-black uppercase tracking-widest text-indigo-500 mb-2 block">Manuscript Submission</span>
-        <h1 className="text-7xl font-extrabold tracking-tight text-slate-900 leading-none">Draft Archive</h1>
-        <p className="text-slate-400 font-medium italic text-xl max-w-xl">
-          Contribute to the global academic repository. Your scientific work is about to undergo high-standard validation.
+    <div className="max-w-4xl mx-auto py-12 px-6 min-h-screen">
+      <header ref={headerRef} className="mb-16 space-y-4">
+        <div className="flex items-center gap-3 text-[var(--primary)] mb-4">
+           <div className="p-2 rounded-lg bg-[var(--primary)]/10">
+              <Sparkles className="w-5 h-5" />
+           </div>
+           <span className="text-xs font-bold uppercase tracking-[0.3em]">Manuscript Protocol</span>
+        </div>
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-none text-[var(--on-background)]">
+          Draft <span className="text-slate-400">Archive</span>
+        </h1>
+        <p className="text-slate-500 font-medium text-lg max-w-xl">
+          Register your contribution to the scientific collective. Your work will undergo high-precision validation.
         </p>
       </header>
 
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-16">
-        <div className="form-field space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic leading-none">Research Title</label>
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-12 bg-[var(--surface)] p-8 md:p-12 rounded-[32px] border border-[var(--card-border)] shadow-xl shadow-black/5">
+        <div className="form-field space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 ml-1">Research Title</label>
           <input 
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="THE ARCHITECTURE OF NEURAL NETS..."
-            className="w-full bg-slate-50 border-2 border-slate-100 p-8 rounded-[32px] text-3xl font-extrabold uppercase placeholder:text-slate-200 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all shadow-sm"
+            className="input-modern !text-lg !font-bold"
           />
         </div>
 
-        <div className="form-field space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic leading-none">Abstract & Scientific Summary</label>
+        <div className="form-field space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 ml-1">Co-Authors (Optional)</label>
+          <div className="flex gap-3">
+            <input 
+              value={newCoAuthor}
+              onChange={(e) => setNewCoAuthor(e.target.value)}
+              placeholder="Add names (e.g. Dr. Arthur Sci)"
+              className="input-modern flex-1"
+              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCoAuthor())}
+            />
+            <button 
+              type="button"
+              onClick={addCoAuthor}
+              className="p-4 rounded-xl bg-[var(--surface)] border border-[var(--card-border)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-all"
+            >
+              <Plus className="w-5 h-5 transition-transform active:rotate-90" />
+            </button>
+          </div>
+          {coAuthors.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {coAuthors.map(author => (
+                <span key={author} className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)]/5 border border-[var(--primary)]/20 text-[var(--primary)] rounded-full text-xs font-bold transition-all hover:bg-[var(--primary)]/10">
+                  <Users className="w-3 h-3" />
+                  {author}
+                  <button type="button" onClick={() => removeCoAuthor(author)} className="hover:text-rose-500 transition-colors">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="form-field space-y-3">
+          <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 ml-1">Abstract & Findings</label>
           <textarea 
             required
             value={abstract}
             onChange={(e) => setAbstract(e.target.value)}
-            placeholder="Explain the core objectives and findings..."
-            className="w-full bg-slate-50 border-2 border-slate-100 p-10 rounded-[40px] font-medium italic text-lg h-64 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all shadow-sm"
+            placeholder="Explain the core objectives..."
+            className="input-modern min-h-[160px] resize-none leading-relaxed"
           />
         </div>
 
         <div className="form-field">
-          <label className="group relative flex flex-col items-center justify-center w-full h-[280px] border-4 border-dashed border-slate-100 rounded-[40px] cursor-pointer hover:border-indigo-600 transition-all bg-slate-50 overflow-hidden shadow-sm">
-            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg shadow-slate-100 mb-6 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                <svg className="w-8 h-8 text-black group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
+          <label className="group relative flex flex-col items-center justify-center w-full h-[240px] border-2 border-dashed border-[var(--card-border)] rounded-3xl cursor-pointer hover:border-[var(--primary)] hover:bg-[var(--primary)]/5 transition-all overflow-hidden group">
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-14 h-14 rounded-2xl bg-[var(--surface)] border border-[var(--card-border)] flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 group-hover:border-[var(--primary)] transition-all">
+                {file ? <CheckCircle2 className="w-7 h-7 text-[var(--primary)]" /> : <FileUp className="w-7 h-7 text-slate-400 group-hover:text-[var(--primary)]" />}
               </div>
-              <p className="mb-2 text-sm font-black uppercase tracking-widest italic text-slate-400 group-hover:text-indigo-600 transition-colors">
+              <p className="mb-1 text-sm font-bold text-slate-500 group-hover:text-[var(--on-background)] transition-colors">
                 {file ? file.name : "ARCHIVE MANUSCRIPT (PDF)"}
               </p>
-              <p className="text-[10px] text-slate-200 font-bold">MAX CAPACITY 10MB</p>
+              <p className="text-[10px] text-slate-300 font-bold uppercase tracking-widest">MAX 10MB SUBMISSION</p>
             </div>
             <input 
               type="file" 
@@ -131,14 +193,15 @@ export default function SubmitResearch() {
           </label>
         </div>
 
-        {message && <p className="text-rose-500 font-black uppercase text-[10px] tracking-widest animate-bounce">{message}</p>}
+        {message && <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 text-rose-500 text-[10px] font-bold uppercase tracking-widest text-center animate-shake">{message}</div>}
 
         <button 
           disabled={uploading}
           type="submit"
-          className="w-full bg-indigo-600 text-white p-10 rounded-[32px] font-black uppercase tracking-[0.2em] text-xs hover:bg-indigo-700 hover:-translate-y-1 active:scale-95 transition-all shadow-2xl shadow-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+          className="btn-primary w-full !py-5 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed text-xs tracking-[0.2em]"
         >
-          {uploading ? "ARCHIVING MANUSCRIPT..." : "FINALIZE SUBMISSION →"}
+          {uploading ? "SYNCING TO ARCHIVE..." : "FINALIZE SUBMISSION"}
+          {!uploading && <ArrowRight className="w-4 h-4" />}
         </button>
       </form>
     </div>

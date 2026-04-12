@@ -4,53 +4,54 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { 
+  Zap, 
+  ArrowRight, 
+  ShieldCheck, 
+  Edit3, 
+  Globe, 
+  Search, 
+  Library,
+  ChevronRight,
+  UploadCloud,
+  Users,
+  FileSignature,
+  Database
+} from "lucide-react";
 
 export default function Home() {
   const containerRef = useRef(null);
-  const heroRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     
     const tl = gsap.timeline();
     
-    // Initial Entrance - Softer curves than before
-    tl.fromTo(".nav-item", 
-      { opacity: 0, y: -20 }, 
-      { opacity: 1, y: 0, duration: 1.2, stagger: 0.1, ease: "power3.out" }
-    ).fromTo(".hero-h1", 
-      { opacity: 0, scale: 0.9, y: 40 }, 
-      { opacity: 1, scale: 1, y: 0, duration: 2, ease: "elastic.out(1, 0.75)" },
-      "-=0.8"
-    ).fromTo(".hero-p", 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
-      "-=1.5"
-    ).fromTo(".floating-shape", 
-       { opacity: 0, scale: 0 }, 
-       { opacity: 1, scale: 1, duration: 2, stagger: 0.3, ease: "back.out(1.7)" },
-       "-=2"
+    // Entrance Animation
+    tl.fromTo(".reveal-stagger", 
+      { opacity: 0, y: 30 }, 
+      { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power4.out" }
     );
 
-    // Subtle floating animation for shapes
-    gsap.to(".floating-shape", {
-      y: "random(-20, 20)",
-      x: "random(-10, 10)",
-      duration: "random(2, 4)",
+    // Subtle floating background nodes
+    gsap.to(".bg-node", {
+      y: "random(-40, 40)",
+      x: "random(-20, 20)",
+      duration: "random(4, 7)",
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut"
     });
 
-    // Scroll Reveals
-    gsap.utils.toArray<HTMLElement>(".reveal-on-scroll").forEach((elem) => {
-      gsap.fromTo(elem, 
-        { opacity: 0, y: 50 }, 
+    // Scroll Reveal for sections
+    gsap.utils.toArray<HTMLElement>(".reveal-section").forEach((section) => {
+      gsap.fromTo(section, 
+        { opacity: 0, y: 40 }, 
         { 
           opacity: 1, y: 0, duration: 1.2, ease: "power3.out",
           scrollTrigger: {
-            trigger: elem,
-            start: "top 85%",
+            trigger: section,
+            start: "top 80%",
           }
         }
       );
@@ -59,101 +60,235 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen relative overflow-hidden bg-[var(--background)] transition-colors duration-300 selection:bg-indigo-500 selection:text-white">
+    <div ref={containerRef} className="min-h-screen relative bg-[var(--background)] selection:bg-[var(--primary)] selection:text-[var(--on-primary)]">
       
-      {/* Dynamic Background Elements */}
-      <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-[120px] -z-10 floating-shape transition-colors duration-300"></div>
-      <div className="absolute bottom-[-5%] left-[-5%] w-[40vw] h-[40vw] bg-violet-100 dark:bg-violet-900/20 rounded-full blur-[100px] -z-10 floating-shape transition-colors duration-300"></div>
-      <div className="absolute top-[20%] left-[10%] w-[10vw] h-[10vw] bg-sky-100 dark:bg-sky-900/20 rounded-full blur-[60px] -z-10 floating-shape transition-colors duration-300"></div>
+      {/* Precision Background Nodes */}
+      <div className="hero-gradient absolute top-0 left-1/2 -translate-x-1/2 w-full h-[80vh] -z-10"></div>
+      <div className="bg-node absolute top-[15%] left-[10%] w-64 h-64 bg-[var(--primary)]/20 rounded-full blur-[100px] -z-10"></div>
+      <div className="bg-node absolute bottom-[20%] right-[10%] w-96 h-96 bg-[var(--secondary)]/20 rounded-full blur-[120px] -z-10"></div>
 
-      {/* Modern Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-6 md:py-10 flex justify-between items-center bg-[var(--surface)]/40 backdrop-blur-md transition-colors duration-300">
-        <div className="nav-item flex items-center gap-3 cursor-pointer group">
-           <svg className="w-8 h-8 md:w-10 md:h-10 shrink-0 select-none group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 ease-out drop-shadow-[0_0_10px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <defs>
-               <linearGradient id="cyber-glow" x1="0%" y1="0%" x2="100%" y2="100%">
-                 <stop offset="0%" stopColor="var(--primary)" />
-                 <stop offset="100%" stopColor="var(--secondary)" />
-               </linearGradient>
-             </defs>
-             {/* Outer Sci-Fi Frame */}
-             <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" stroke="url(#cyber-glow)" strokeWidth="6" fill="url(#cyber-glow)" fillOpacity="0.15" />
-             {/* Core Monolith Geometry */}
-             <path d="M50 18 L75 30 L75 70 L50 82 L25 70 L25 30 Z" stroke="var(--primary)" strokeWidth="3" fill="var(--background)" fillOpacity="0.5" />
-             {/* Abstract J Mark */}
-             <path d="M60 35 V55 C60 65 40 65 40 55" stroke="url(#cyber-glow)" strokeWidth="8" strokeLinecap="round" />
-             <path d="M40 35 H70" stroke="url(#cyber-glow)" strokeWidth="8" strokeLinecap="round" />
-           </svg>
-           <span className="text-lg md:text-xl font-bold tracking-tight text-[var(--on-background)] transition-colors duration-300">JournalPlatform</span>
-        </div>
-        <div className="flex gap-12 items-center">
-          <Link href="/reader" className="nav-item text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-[var(--primary)] transition-all">Archive</Link>
-          <Link href="/login" className="nav-item px-8 py-3 bg-[var(--primary)] text-white font-bold rounded-2xl shadow-xl shadow-[var(--primary)]/20 hover:scale-105 active:scale-95 transition-all">
-            Secure Entry
-          </Link>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <main className="relative pt-32 md:pt-48 px-6 md:px-12 pb-20 md:pb-32">
-        <section ref={heroRef} className="max-w-6xl mx-auto flex flex-col items-center text-center gap-8 md:gap-10 py-10 md:py-20">
-          <span className="hero-p inline-block px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-[var(--primary)] rounded-full text-sm font-bold tracking-wide uppercase">
-            Evolution of Peer Review
-          </span>
-          <h1 className="hero-h1 text-6xl sm:text-[7vw] md:text-8xl font-extrabold leading-[0.95] tracking-tight text-[var(--on-background)] transition-colors duration-300">
-            Research with <span className="text-[var(--primary)]">Visual</span> Clarity.
+      {/* Modern Hero Section */}
+      <section className="relative pt-32 md:pt-48 px-6 md:px-12 pb-24 md:pb-40 overflow-hidden">
+        <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
+          <div className="reveal-stagger inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[var(--primary)]/5 border border-[var(--primary)]/20 text-[var(--primary)] text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-[0_0_20px_rgba(0,242,254,0.1)]">
+            <Zap className="w-3 h-3 fill-current" />
+            <span>Monolith v4.0 Protocol</span>
+          </div>
+          
+          <h1 className="reveal-stagger text-6xl md:text-9xl font-black tracking-tighter text-[var(--on-background)] leading-[0.9] mb-12">
+            The Scientific <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-[var(--primary)] to-[var(--secondary)]">Manifesto.</span>
           </h1>
-          <p className="hero-p text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-slate-400 font-medium max-w-2xl leading-relaxed px-4">
-            A vibrant, modern workspace for authors, editors, and publishers to collaborate on the future of scientific discovery.
+          
+          <p className="reveal-stagger text-lg md:text-2xl text-slate-500 max-w-3xl font-medium leading-relaxed mb-16 opacity-80">
+            A computationally advanced repository for authors and the global scientific collective, engineered for sovereign academic integrity.
           </p>
           
-          <div className="hero-p flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-4 md:gap-6 mt-6 px-4">
-            <Link href="/register" className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 bg-[var(--primary)] text-white font-bold rounded-3xl shadow-2xl hover:-translate-y-1 active:scale-95 transition-all">
-              Initialize Submission
+          <div className="reveal-stagger flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
+            <Link href="/register" className="btn-primary group !px-12 !py-6 shadow-[0_0_30px_rgba(0,242,254,0.2)]">
+              Register Protocol
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/reader" className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 bg-[var(--surface)] text-[var(--on-background)] font-bold rounded-3xl shadow-xl border border-[var(--card-border)] hover:-translate-y-1 active:scale-95 transition-all">
-              Explore Archive
+            <Link href="/reader" className="btn-secondary !px-12 !py-6">
+              Login Archives
             </Link>
           </div>
-        </section>
+        </div>
 
-        {/* Feature Cards */}
-        <section className="max-w-7xl mx-auto py-32 grid md:grid-cols-3 gap-10">
-          <div className="reveal-on-scroll bg-[var(--surface)] p-12 rounded-[40px] shadow-sm border border-[var(--card-border)] space-y-8 hover:shadow-2xl transition-all duration-300">
-             <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-             </div>
-             <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)]">Author Identity</h3>
-             <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">Secure, encrypted manuscript submissions with automated metadata archival.</p>
-          </div>
-          <div className="reveal-on-scroll bg-[var(--surface)] p-12 rounded-[40px] shadow-sm border border-[var(--card-border)] space-y-8 hover:shadow-2xl transition-all duration-300 translate-y-10">
-             <div className="w-16 h-16 bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-2xl flex items-center justify-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-             </div>
-             <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)]">Editor Markup</h3>
-             <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">Real-time refinement tools to polish manuscripts before peer evaluation.</p>
-          </div>
-          <div className="reveal-on-scroll bg-[var(--surface)] p-12 rounded-[40px] shadow-sm border border-[var(--card-border)] space-y-8 hover:shadow-2xl transition-all duration-300 h-full">
-             <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-             </div>
-             <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)]">Peer Review</h3>
-             <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">Comparative side-by-side critique for scientific validation and integrity.</p>
-          </div>
-        </section>
+        {/* Cyber Dashboard Preview Mockup */}
+        <div className="reveal-stagger mt-32 md:mt-48 relative max-w-6xl mx-auto group">
+           <div className="cyber-container p-4 md:p-8 aspect-[16/10] shadow-[0_0_50px_rgba(0,242,254,0.1)] overflow-hidden">
+              <img 
+                src="/hero-image.png" 
+                alt="Monolith Protocol Visualization" 
+                className="w-full h-full object-cover rounded-[24px] opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-1000 select-none pointer-events-none"
+              />
+              {/* Inner Glow Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none"></div>
+           </div>
+           
+           {/* Enhanced Exterior Glows */}
+           <div className="absolute -top-20 -left-20 w-64 h-64 bg-[var(--primary)]/10 blur-[120px] rounded-full animate-pulse"></div>
+           <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[var(--secondary)]/10 blur-[140px] rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="max-w-7xl mx-auto py-12 md:py-20 border-t border-[var(--card-border)] flex flex-col-reverse md:flex-row justify-between items-center gap-10 transition-colors duration-300 text-center md:text-left shadow-none px-4">
-          <div className="flex flex-col md:flex-row items-center gap-4 text-slate-300 dark:text-slate-600">
-             <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded-lg transition-colors duration-300 hidden md:block"></div>
-             <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest leading-loose text-slate-400">© 2026 ALL RIGHTS RESERVED · JOURNAL PLATFORM</span>
+      {/* Protocol Visual Section Branding */}
+      <section className="reveal-section px-6 md:px-12 pt-12 text-center">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-xs font-black uppercase tracking-[0.6em] text-[var(--primary)] opacity-40 mb-6 pulse-glow">Computational Oversight Engine</h2>
+          <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] opacity-60">High-Precision Metadata Validation · Real-Time Peer Matrix · Sovereign Archival Chain</p>
+        </div>
+      </section>
+
+      {/* Workflow Strategy Engine */}
+      <section className="reveal-section px-6 md:px-12 py-24 md:py-32 bg-[var(--background)] relative z-10 w-full overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <header className="mb-24 text-center">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">The Monolith <span className="text-[var(--primary)]">Workflow</span></h2>
+            <p className="text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
+              Our high-precision pipeline strictly routes cryptographic manuscripts through specialized vetting matrices.
+            </p>
+          </header>
+
+          <div className="relative">
+             {/* Glowing connection line behind the steps */}
+             <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-[var(--secondary)] to-fuchsia-500 opacity-20 hidden lg:block -translate-y-1/2 rounded-full blur-[2px]"></div>
+             
+             <div className="grid lg:grid-cols-4 gap-8 lg:gap-12 relative z-10">
+               {[
+                 {
+                   step: "01",
+                   title: "Initialization",
+                   desc: "Authors securely upload encrypted manuscript data into the global queue.",
+                   icon: UploadCloud,
+                   color: "from-sky-400 to-[var(--primary)]",
+                   glow: "shadow-[0_0_30px_rgba(0,242,254,0.3)]"
+                 },
+                 {
+                   step: "02",
+                   title: "Vector Assignment",
+                   desc: "Editorial directives automatically route research to targeted evaluators.",
+                   icon: Users,
+                   color: "from-[var(--primary)] to-indigo-500",
+                   glow: "shadow-[0_0_30px_rgba(99,102,241,0.3)]"
+                 },
+                 {
+                   step: "03",
+                   title: "Peer Matrix",
+                   desc: "Publishers conduct high-fidelity semantic reviews and submit locked decisions.",
+                   icon: FileSignature,
+                   color: "from-indigo-500 to-[var(--secondary)]",
+                   glow: "shadow-[0_0_30px_rgba(139,92,246,0.3)]"
+                 },
+                 {
+                   step: "04",
+                   title: "Permanent Archive",
+                   desc: "Approved protocols are immutably written into the reader accessibility grid.",
+                   icon: Database,
+                   color: "from-[var(--secondary)] to-fuchsia-500",
+                   glow: "shadow-[0_0_30px_rgba(217,70,239,0.3)]"
+                 }
+               ].map((phase, i) => (
+                 <div key={i} className="bg-[var(--surface)] border border-[var(--card-border)] rounded-[32px] p-8 relative group hover:-translate-y-4 transition-all duration-500 hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(0,242,254,0.15)]">
+                    <div className={`absolute -inset-[1px] bg-gradient-to-br ${phase.color} rounded-[32px] opacity-0 group-hover:opacity-100 -z-10 transition-opacity duration-500`}></div>
+                    <div className="absolute -inset-[1px] bg-[var(--surface)] rounded-[31px] -z-[5]"></div>
+                    
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-10 text-white bg-gradient-to-br ${phase.color} ${phase.glow} shadow-xl group-hover:scale-110 transition-transform duration-500 relative z-20`}>
+                      <phase.icon className="w-8 h-8 drop-shadow-md" />
+                    </div>
+                    
+                    <span className="text-[50px] font-black text-slate-100 dark:text-slate-900/40 leading-none absolute top-6 right-8 select-none transition-colors duration-500 group-hover:text-[var(--background)] dark:group-hover:text-[var(--background)]">
+                      {phase.step}
+                    </span>
+                    
+                    <h3 className="text-xl font-bold mb-4 relative z-20">{phase.title}</h3>
+                    <p className="text-sm text-slate-500 leading-relaxed font-medium relative z-20">
+                      {phase.desc}
+                    </p>
+                 </div>
+               ))}
+             </div>
           </div>
-          <div className="flex flex-wrap justify-center md:flex-nowrap gap-6 md:gap-12 font-bold text-[10px] md:text-xs uppercase tracking-widest text-slate-400">
-            <Link href="#" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-[var(--primary)] transition-colors">Terms of Ethics</Link>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="reveal-section px-6 md:px-12 py-24 md:py-40 bg-[var(--surface)]/50 border-y border-[var(--card-border)]">
+        <div className="max-w-7xl mx-auto">
+          <header className="mb-20 text-center md:text-left">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Engineered for Scholars.</h2>
+            <p className="text-slate-500 font-medium">Precision tools for every step of the manuscript lifecycle.</p>
+          </header>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { 
+                title: "Author Identity", 
+                desc: "Secure, encrypted submissions with automated archival.", 
+                icon: ShieldCheck,
+                color: "var(--primary)"
+              },
+              { 
+                title: "Editorial Logic", 
+                desc: "Real-time refinement tools to polish and validate contributions.", 
+                icon: Edit3,
+                color: "var(--secondary)"
+              },
+              { 
+                title: "Global Reach", 
+                desc: "Instant indexing and worldwide citation visibility.", 
+                icon: Globe,
+                color: "var(--accent)"
+              }
+            ].map((feat, i) => (
+              <div key={i} className="card-modern group">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-all duration-500 group-hover:scale-110" style={{ background: `${feat.color}15`, color: feat.color }}>
+                  <feat.icon className="w-7 h-7" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{feat.title}</h3>
+                <p className="text-slate-500 font-medium mb-8 leading-relaxed">{feat.desc}</p>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--primary)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  Learn Protocol <ChevronRight className="w-4 h-4" />
+                </div>
+              </div>
+            ))}
           </div>
-        </footer>
-      </main>
+        </div>
+      </section>
+
+      {/* CTA Footer Section */}
+      <section className="reveal-section px-6 md:px-12 py-32 md:py-48 text-center">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Ready to Contribute?</h2>
+          <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Join thousands of researchers in the world's most advanced journal management ecosystem.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <Link href="/register" className="btn-primary !px-12 !py-6">Join the Collective</Link>
+            <Link href="/login" className="btn-secondary !px-12 !py-6">Identity Login</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Footer */}
+      <footer className="px-6 md:px-12 py-12 md:py-24 border-t border-[var(--card-border)] bg-[var(--surface)]">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-20 text-center md:text-left">
+          <div className="md:col-span-2 space-y-6">
+            <div className="flex items-center justify-center md:justify-start gap-3">
+              <Zap className="w-6 h-6 text-[var(--primary)]" />
+              <span className="text-xl font-bold">Monolith</span>
+            </div>
+            <p className="text-slate-500 text-sm max-w-sm leading-loose">
+              Setting the gold standard for academic integrity and computational transparency in research publication.
+            </p>
+          </div>
+          <div className="space-y-6">
+            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Resources</h4>
+            <ul className="space-y-4 text-sm font-medium text-slate-500">
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Scientific Ethics</Link></li>
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Peer Review Guide</Link></li>
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">API Documentation</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-6">
+            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">System</h4>
+            <ul className="space-y-4 text-sm font-medium text-slate-500">
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link></li>
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Cloud Security</Link></li>
+              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Contact Support</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto pt-10 border-t border-[var(--card-border)] flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+          <span>© 2026 MONOLITH RESEARCH ARCHIVE</span>
+          <div className="flex gap-8">
+            <Link href="#" className="hover:text-[var(--primary)] transition-colors">X (Twitter)</Link>
+            <Link href="#" className="hover:text-[var(--primary)] transition-colors">GitHub</Link>
+            <Link href="#" className="hover:text-[var(--primary)] transition-colors">LinkedIn</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

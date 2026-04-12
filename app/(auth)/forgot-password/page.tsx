@@ -36,8 +36,8 @@ export default function ForgotPasswordPage() {
       <div ref={cardRef} className="w-full max-w-md bg-[var(--surface)] p-12 rounded-[48px] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-[var(--card-border)] relative z-10 transition-all duration-300">
         <header className="mb-12 space-y-3 text-center">
            <div className="w-16 h-16 bg-[var(--primary)] rounded-3xl shadow-xl shadow-[var(--primary)]/20 flex items-center justify-center text-white font-black text-2xl mx-auto mb-6">J</div>
-           <h2 className="text-4xl font-extrabold tracking-tight text-[var(--on-background)] leading-none">Recover Access</h2>
-           <p className="text-slate-400 font-medium text-sm">Enter your registry email to initiate reset sequence</p>
+           <h2 className="text-4xl font-extrabold tracking-tight text-[var(--on-background)] leading-none uppercase tracking-tighter">Forgot <span className="text-[var(--primary)]">Password</span></h2>
+           <p className="text-slate-400 font-medium text-sm">Enter your registry email to reset your authentication protocol</p>
         </header>
 
         {status === "error" && (
