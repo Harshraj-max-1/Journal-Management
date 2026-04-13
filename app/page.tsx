@@ -99,7 +99,7 @@ export default function Home() {
         <div className="reveal-stagger mt-32 md:mt-48 relative max-w-6xl mx-auto group">
            <div className="cyber-container p-4 md:p-8 aspect-[16/10] shadow-[0_0_50px_rgba(0,242,254,0.1)] overflow-hidden">
               <img 
-                src="/hero-image.png" 
+                src="/6.9.png" 
                 alt="Monolith Protocol Visualization" 
                 className="w-full h-full object-cover rounded-[24px] opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-1000 select-none pointer-events-none"
               />
