@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
   PenTool, 
   Send, 
@@ -28,10 +29,26 @@ export default function EditorDashboard() {
       .then((data) => {
         if (Array.isArray(data)) setPapers(data);
         setLoading(false);
-        gsap.fromTo(".editor-row", 
-          { opacity: 0, y: 20 }, 
-          { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
-        );
+        
+        setTimeout(() => {
+          gsap.registerPlugin(ScrollTrigger);
+          gsap.utils.toArray<HTMLElement>(".editor-row").forEach((card, i) => {
+            gsap.fromTo(card, 
+              { opacity: 0, y: 40 }, 
+              { 
+                opacity: 1, 
+                y: 0, 
+                duration: 0.8, 
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 90%",
+                  toggleActions: "play none none none"
+                }
+              }
+            );
+          });
+        }, 100);
       })
       .catch(() => setLoading(false));
 
@@ -92,13 +109,15 @@ export default function EditorDashboard() {
         </div>
       </header>
 
-      <section className="flex flex-col gap-6">
-        {papers.map((paper) => (
-          <div key={paper.id} className="editor-row group p-8 md:p-10 bg-[var(--surface)] rounded-[40px] border border-[var(--card-border)] hover:border-[var(--primary)]/30 transition-all duration-500 flex flex-col xl:flex-row justify-between items-center relative overflow-hidden h-full lg:h-auto">
-            <div className="flex-1 w-full xl:pr-12 space-y-6">
-              <div className="flex items-center flex-wrap gap-4">
-                 <span className="px-4 py-1.5 bg-slate-50 dark:bg-slate-900 text-[10px] font-bold text-slate-400 rounded-full border border-[var(--card-border)] group-hover:bg-[var(--primary)]/5 group-hover:text-[var(--primary)] transition-colors uppercase tracking-widest">SUB-#{paper.id.slice(-8)}</span>
-                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {papers.map((paper, idx) => {
+          const isFeatured = idx === 0 || idx % 4 === 0;
+          return (
+          <div key={paper.id} className={`editor-row group p-8 md:p-10 bg-[var(--surface)] rounded-[40px] border border-[var(--card-border)] hover:border-[var(--primary)]/30 transition-all duration-500 flex flex-col justify-between relative overflow-hidden h-full ${isFeatured ? 'md:col-span-2 xl:col-span-2' : 'col-span-1'}`}>
+            <div className="flex-1 w-full space-y-6">
+              <div className="flex items-center flex-wrap gap-3">
+                 <span className="px-3 py-1 bg-slate-50 dark:bg-slate-900 text-[10px] font-bold text-slate-400 rounded-full border border-[var(--card-border)] group-hover:bg-[var(--primary)]/5 group-hover:text-[var(--primary)] transition-colors uppercase tracking-widest">SUB-#{paper.id.slice(-8)}</span>
+                 <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border ${
                     paper.status === 'ACCEPTED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 
                     paper.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 
                     'bg-[var(--primary)]/10 text-[var(--primary)] border-[var(--primary)]/20'
@@ -106,32 +125,32 @@ export default function EditorDashboard() {
                     {paper.status.replace('_', ' ')}
                   </span>
               </div>
-              <h3 className="text-3xl font-bold tracking-tight text-[var(--on-background)] leading-tight group-hover:text-[var(--primary)] transition-colors">{paper.title}</h3>
-              <div className="flex items-center gap-4 text-xs font-semibold text-slate-500">
+              <h3 className={`${isFeatured ? 'text-3xl lg:text-4xl' : 'text-2xl'} font-bold tracking-tight text-[var(--on-background)] leading-tight group-hover:text-[var(--primary)] transition-colors`}>{paper.title}</h3>
+              <div className="flex items-center flex-wrap gap-4 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
                  <span className="flex items-center gap-1.5"><User className="w-4 h-4" /> {paper.author.name}</span>
-                 <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> Initiated {new Date(paper.createdAt).toLocaleDateString()}</span>
+                 <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(paper.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
             
-            <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 mt-8 xl:mt-0 pt-8 xl:pt-0 border-t border-[var(--card-border)] xl:border-t-0 w-full xl:w-auto">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 mt-8 pt-8 border-t border-[var(--card-border)] w-full">
               <Link 
                 href={`/editor/paper/${paper.id}`}
-                className="flex-1 xl:flex-none btn-secondary !px-8 !py-4 !text-[10px] !tracking-widest"
+                className="flex-1 btn-secondary !px-4 !py-4 !text-[10px] !tracking-widest text-center"
               >
-                Launch Analysis
+                Review
               </Link>
               <button 
                 onClick={() => updateStatus(paper.id, 'UNDER_REVIEW')}
-                className="flex-1 xl:flex-none btn-primary !px-8 !py-4 shadow-xl !text-[10px] !tracking-widest"
+                className="flex-1 btn-primary !px-4 !py-4 shadow-xl !text-[10px] !tracking-widest"
               >
-                Distribute Study
+                Distribute
               </button>
             </div>
 
             {/* Subtle Gradient Glow */}
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[var(--primary)]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
-        ))}
+        )})}
         {papers.length === 0 && (
           <div className="py-32 text-center bg-[var(--surface)] border-2 border-dashed border-[var(--card-border)] rounded-[48px] flex flex-col items-center gap-8 group">
              <div className="w-20 h-20 bg-slate-50 dark:bg-slate-900 border border-[var(--card-border)] rounded-full flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">

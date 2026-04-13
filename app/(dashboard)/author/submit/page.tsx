@@ -12,7 +12,8 @@ import {
   ArrowRight, 
   FileText, 
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from "lucide-react";
 
 export default function SubmitResearch() {
@@ -22,6 +23,7 @@ export default function SubmitResearch() {
   const [newCoAuthor, setNewCoAuthor] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
   
@@ -88,16 +90,19 @@ export default function SubmitResearch() {
       });
 
       if (res.ok) {
-        router.push("/author");
+        setSuccess(true);
+        setTimeout(() => {
+           router.push("/author");
+        }, 1200);
       } else {
         setMessage("Critical failure arching the manuscript. Please retry.");
+        setUploading(false);
       }
     } catch (error: any) {
       console.error(error);
       setMessage(error.message || "A network anomaly has occurred.");
-    } finally {
       setUploading(false);
-    }
+    } 
   };
 
   return (
@@ -196,12 +201,13 @@ export default function SubmitResearch() {
         {message && <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 text-rose-500 text-[10px] font-bold uppercase tracking-widest text-center animate-shake">{message}</div>}
 
         <button 
-          disabled={uploading}
+          disabled={uploading || success}
           type="submit"
-          className="btn-primary w-full !py-5 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed text-xs tracking-[0.2em]"
+          className="btn-primary w-full !py-5 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed text-xs tracking-[0.2em] flex items-center justify-center gap-2"
         >
-          {uploading ? "SYNCING TO ARCHIVE..." : "FINALIZE SUBMISSION"}
-          {!uploading && <ArrowRight className="w-4 h-4" />}
+          {uploading && !success ? <><Loader2 className="w-5 h-5 animate-spin" /> SYNCING TO ARCHIVE...</> : 
+           success ? <><CheckCircle2 className="w-5 h-5" /> PROTOCOL SECURED</> : 
+           <>FINALIZE SUBMISSION <ArrowRight className="w-4 h-4 ml-1" /></>}
         </button>
       </form>
     </div>

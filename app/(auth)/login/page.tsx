@@ -5,12 +5,14 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import gsap from "gsap";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const cardRef = useRef(null);
@@ -25,18 +27,22 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setSuccess(false);
     setError("");
     
     try {
       const res = await signIn("credentials", { email, password, redirect: false });
       if (res?.error) {
         setError("Invalid authentication credentials.");
+        setLoading(false);
       } else {
-        window.location.href = "/";
+        setSuccess(true);
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 800);
       }
     } catch (err) {
       setError("A system anomaly occurred.");
-    } finally {
       setLoading(false);
     }
   };
@@ -47,7 +53,7 @@ export default function LoginPage() {
       <div className="absolute top-[-20%] right-[-10%] w-[120vw] h-[120vw] bg-[var(--primary)]/10 rounded-full blur-[140px] -z-10 animate-pulse"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[100vw] h-[100vw] bg-[var(--secondary)]/10 rounded-full blur-[140px] -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-      <div ref={cardRef} className="cyber-container w-full max-w-xl p-10 md:p-20 relative z-10">
+      <div ref={cardRef} className="cyber-container w-full max-w-xl p-10 md:p-20 relative z-10 animated-border">
         <header className="mb-12 md:mb-16 space-y-6 text-center">
            <div className="relative inline-block">
               <svg className="w-24 h-24 mx-auto mb-8 shrink-0 select-none drop-shadow-[0_0_20px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,10 +111,12 @@ export default function LoginPage() {
 
           <button 
             type="submit" 
-            disabled={loading}
-            className="btn-primary w-full !rounded-[24px] shadow-[0_0_40px_rgba(0,242,254,0.15)]"
+            disabled={loading || success}
+            className="btn-primary w-full !rounded-[24px] shadow-[0_0_40px_rgba(0,242,254,0.15)] flex items-center justify-center gap-2"
           >
-            {loading ? "Authenticating..." : "Login Entry →"}
+            {loading && !success ? <Loader2 className="w-5 h-5 animate-spin" /> : 
+             success ? <span className="flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Verified</span> : 
+             "Login Entry →"}
           </button>
         </form>
 
@@ -134,7 +142,7 @@ export default function LoginPage() {
 
         <footer className="mt-16 pt-10 border-t border-[var(--card-border)] text-center">
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-            Awaiting registration? <Link href="/register" className="text-[var(--primary)] hover:underline underline-offset-8">Submit Manifesto</Link>
+            Awaiting registration? <Link href="/register" className="text-[var(--primary)] hover:underline underline-offset-8">Create Account</Link>
           </p>
         </footer>
       </div>

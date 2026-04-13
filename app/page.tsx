@@ -76,12 +76,12 @@ export default function Home() {
           </div>
           
           <h1 className="reveal-stagger text-6xl md:text-9xl font-black tracking-tighter text-[var(--on-background)] leading-[0.9] mb-12">
-            The Scientific <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-[var(--primary)] to-[var(--secondary)]">Manifesto.</span>
+            The Research <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-[var(--primary)] to-[var(--secondary)]">Platform.</span>
           </h1>
           
           <p className="reveal-stagger text-lg md:text-2xl text-slate-500 max-w-3xl font-medium leading-relaxed mb-16 opacity-80">
-            A computationally advanced repository for authors and the global scientific collective, engineered for sovereign academic integrity.
+            A professional repository for authors and researchers, built for academic integrity and simplified journal management.
           </p>
           
           <div className="reveal-stagger flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
@@ -262,21 +262,27 @@ export default function Home() {
             <p className="text-slate-500 text-sm max-w-sm leading-loose">
               Setting the gold standard for academic integrity and computational transparency in research publication.
             </p>
+            <div className="pt-2 text-sm font-medium text-slate-400 space-y-2">
+              <p><strong className="text-[var(--primary)] font-bold">Contact:</strong> 6203732359 & 9569908897</p>
+              <p><strong className="text-[var(--primary)] font-bold">WhatsApp:</strong> 6203732359 & 9569908897</p>
+              <p><strong className="text-[var(--primary)] font-bold">Email:</strong> hraj18199@gmail.com & adityarusia7@gmail.com</p>
+              <p><strong className="text-[var(--primary)] font-bold">GitHub:</strong> Harshraj-max-1</p>
+            </div>
           </div>
           <div className="space-y-6">
             <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Resources</h4>
             <ul className="space-y-4 text-sm font-medium text-slate-500">
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Scientific Ethics</Link></li>
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Peer Review Guide</Link></li>
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">API Documentation</Link></li>
+              <li><Link href="/resources/ethics" className="hover:text-[var(--primary)] transition-colors">Scientific Ethics</Link></li>
+              <li><Link href="/resources/peer-review" className="hover:text-[var(--primary)] transition-colors">Peer Review Guide</Link></li>
+              <li><Link href="/resources/api" className="hover:text-[var(--primary)] transition-colors">API Documentation</Link></li>
             </ul>
           </div>
           <div className="space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">System</h4>
+            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Policies</h4>
             <ul className="space-y-4 text-sm font-medium text-slate-500">
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Cloud Security</Link></li>
-              <li><Link href="#" className="hover:text-[var(--primary)] transition-colors">Contact Support</Link></li>
+              <li><Link href="/policies/company" className="hover:text-[var(--primary)] transition-colors">Company Policies</Link></li>
+              <li><Link href="/policies/privacy" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/policies/security" className="hover:text-[var(--primary)] transition-colors">Cloud Security</Link></li>
             </ul>
           </div>
         </div>

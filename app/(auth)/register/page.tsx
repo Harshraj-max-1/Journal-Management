@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import gsap from "gsap";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -13,6 +14,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState("AUTHOR");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const cardRef = useRef(null);
@@ -27,6 +29,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setSuccess(false);
     setError("");
 
     try {
@@ -37,14 +40,17 @@ export default function RegisterPage() {
       });
 
       if (res.ok) {
-        await signIn("credentials", { email, password, callbackUrl: "/" });
+        setSuccess(true);
+        setTimeout(() => {
+          signIn("credentials", { email, password, callbackUrl: "/" });
+        }, 800);
       } else {
         const data = await res.json();
         setError(data.message || "Archive application failed.");
+        setLoading(false);
       }
     } catch (err) {
       setError("A system anomaly occurred.");
-    } finally {
       setLoading(false);
     }
   };
@@ -55,7 +61,7 @@ export default function RegisterPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[100vw] h-[100vw] md:w-[60vw] md:h-[60vw] bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-[120px] -z-10 transition-colors duration-300"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[80vw] h-[80vw] md:w-[50vw] md:h-[50vw] bg-violet-100 dark:bg-violet-900/20 rounded-full blur-[100px] -z-10 transition-colors duration-300"></div>
 
-      <div ref={cardRef} className="w-full max-w-xl bg-[var(--surface)] p-8 md:p-12 rounded-[40px] md:rounded-[56px] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-[var(--card-border)] relative z-10 transition-all duration-300">
+      <div ref={cardRef} className="w-full max-w-xl bg-[var(--surface)] p-8 md:p-12 rounded-[40px] md:rounded-[56px] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-[var(--card-border)] relative z-10 transition-all duration-300 animated-border">
         <header className="mb-10 space-y-3 text-center">
            <svg className="w-16 h-16 mx-auto mb-6 shrink-0 select-none drop-shadow-[0_0_15px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
              <defs>
@@ -69,8 +75,8 @@ export default function RegisterPage() {
              <path d="M60 35 V55 C60 65 40 65 40 55" stroke="url(#cyber-glow-register)" strokeWidth="8" strokeLinecap="round" />
              <path d="M40 35 H70" stroke="url(#cyber-glow-register)" strokeWidth="8" strokeLinecap="round" />
            </svg>
-           <h2 className="text-4xl font-extrabold tracking-tight text-[var(--on-background)] leading-none transition-colors duration-300">Manuscript Identity</h2>
-           <p className="text-slate-400 font-medium text-sm">Register your application to the scientific collective.</p>
+           <h2 className="text-4xl font-extrabold tracking-tight text-[var(--on-background)] leading-none transition-colors duration-300">Create Account</h2>
+           <p className="text-slate-400 font-medium text-sm">Join our research platform and start submitting your papers.</p>
         </header>
 
         {error && (
@@ -125,10 +131,12 @@ export default function RegisterPage() {
 
           <button 
             type="submit" 
-            disabled={loading}
-            className="btn-primary col-span-1 md:col-span-2 py-4 md:py-6 !rounded-3xl shadow-2xl w-full text-center disabled:opacity-70 disabled:hover:translate-y-0"
+            disabled={loading || success}
+            className="btn-primary col-span-1 md:col-span-2 py-4 md:py-6 !rounded-3xl shadow-2xl w-full text-center disabled:opacity-70 disabled:hover:translate-y-0 flex items-center justify-center gap-2"
           >
-            {loading ? "REGISTERING..." : "SUBMIT →"}
+            {loading && !success ? <Loader2 className="w-5 h-5 animate-spin" /> : 
+             success ? <span className="flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> COMPLETE</span> : 
+             "CREATE ACCOUNT →"}
           </button>
         </form>
 

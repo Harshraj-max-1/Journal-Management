@@ -85,10 +85,10 @@ export default function AuthorDashboard() {
              <span className="text-[10px] font-black uppercase tracking-[0.5em] opacity-70">Institutional Node 0x7F</span>
           </div>
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-[var(--on-background)] leading-none uppercase">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">Manifests</span>
+            My <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">Submissions</span>
           </h1>
           <p className="text-slate-500 font-bold text-xl leading-relaxed max-w-2xl opacity-80">
-            A computationally advanced registry for your scientific contributions and their sovereign archival journey.
+            Track and manage your research papers through the peer-review and archival process.
           </p>
         </div>
         <Link 
@@ -144,25 +144,49 @@ export default function AuthorDashboard() {
                   </h3>
                   <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
                      <span className="flex items-center gap-2 group-hover:text-slate-300 transition-colors"><Clock className="w-4 h-4 opacity-40" /> Updated-T:12D</span>
-                     <span className="flex items-center gap-2 group-hover:text-[var(--primary)] transition-colors"><ExternalLink className="w-4 h-4 opacity-40" /> Login Manifesto</span>
+                     <span className="flex items-center gap-2 group-hover:text-[var(--primary)] transition-colors"><ExternalLink className="w-4 h-4 opacity-40" /> View Submission</span>
                   </div>
                 </div>
 
-                {/* Journey Timeline View */}
-                <div className="hidden lg:flex col-span-4 justify-center px-12">
-                   <div className="flex items-center w-full max-w-[300px] relative">
-                      {[0, 1, 2, 3].map((step) => (
-                        <div key={step} className="flex-1 flex items-center relative">
-                           <div className={`w-4 h-4 rounded-lg border-2 z-10 transition-all duration-1000 ${
-                             step <= currentStep ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_15px_rgba(0,242,254,0.6)]' : 'bg-slate-900 border-white/10'
-                           }`}></div>
-                           {step < 3 && (
-                             <div className={`h-[1px] w-full absolute left-4 transition-all duration-1000 ${
-                               step < currentStep ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/50' : 'bg-white/5'
-                             }`}></div>
-                           )}
-                        </div>
-                      ))}
+                {/* Labeled Journey Timeline View */}
+                <div className="hidden lg:flex col-span-4 justify-center px-4 w-full">
+                   <div className="flex justify-between items-start w-full max-w-[400px] relative pt-2">
+                      {['SUBMITTED', 'UNDER_REVIEW', 'ACCEPTED', 'PUBLISHED'].map((stepStatus, idx) => {
+                        // Current status index calculation
+                        const steps = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'ACCEPTED', 'PUBLISHED'];
+                        const currentIndex = steps.indexOf(paper.status);
+                        const stepIndex = steps.indexOf(stepStatus);
+                        
+                        const isCompleted = currentIndex >= stepIndex;
+                        const isCurrent = paper.status === stepStatus || (paper.status === 'REJECTED' && idx === 1); // Show rejected at 'Under Review'
+                        const isRejected = paper.status === 'REJECTED' && idx === 1;
+
+                        return (
+                          <div key={idx} className="flex flex-col items-center relative z-10 flex-1">
+                             {/* Connector Line */}
+                             {idx < 3 && (
+                               <div className={`absolute top-2 left-1/2 w-full h-[2px] -z-10 transition-all duration-1000 ${
+                                 currentIndex > stepIndex ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/50' : 'bg-white/5'
+                               }`}></div>
+                             )}
+                             
+                             <div className={`w-4 h-4 rounded-full border-2 mb-3 transition-all duration-1000 flex items-center justify-center ${
+                               isRejected ? 'bg-rose-500 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.6)]' :
+                               isCompleted ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_15px_rgba(0,242,254,0.6)]' : 
+                               'bg-slate-900 border-white/10'
+                             }`}>
+                                {isCompleted && !isRejected && <div className="w-1.5 h-1.5 bg-black rounded-full"></div>}
+                             </div>
+                             <span className={`text-[8px] font-black uppercase tracking-widest text-center absolute top-7 mt-1 whitespace-nowrap ${
+                               isRejected ? 'text-rose-500' :
+                               isCurrent ? 'text-[var(--primary)]' : 
+                               isCompleted ? 'text-slate-300' : 'text-slate-600'
+                             }`}>
+                               {isRejected ? 'REJECTED' : stepStatus.replace('_', ' ')}
+                             </span>
+                          </div>
+                        )
+                      })}
                    </div>
                 </div>
 
