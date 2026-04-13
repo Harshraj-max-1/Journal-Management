@@ -163,28 +163,3 @@
   opacity: 0.25;
   filter: blur(100px);
 }
-
-@keyframes border-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.animated-border {
-  position: relative;
-  z-index: 1;
-}
-
-.animated-border::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -2px;
-  border-radius: inherit;
-  background: conic-gradient(from 0deg at 50% 50%, transparent 0%, transparent 30%, var(--primary) 50%, var(--secondary) 80%, transparent 100%);
-  animation: border-spin 5s linear infinite;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 2px;
-}

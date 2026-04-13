@@ -61,7 +61,7 @@ export default function RegisterPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[100vw] h-[100vw] md:w-[60vw] md:h-[60vw] bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-[120px] -z-10 transition-colors duration-300"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[80vw] h-[80vw] md:w-[50vw] md:h-[50vw] bg-violet-100 dark:bg-violet-900/20 rounded-full blur-[100px] -z-10 transition-colors duration-300"></div>
 
-      <div ref={cardRef} className="w-full max-w-xl bg-[var(--surface)] p-8 md:p-12 rounded-[40px] md:rounded-[56px] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-[var(--card-border)] relative z-10 transition-all duration-300 animated-border">
+      <div ref={cardRef} className="w-full max-w-xl bg-[var(--surface)] p-8 md:p-12 rounded-[40px] md:rounded-[56px] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-[var(--card-border)] relative z-10 transition-all duration-300">
         <header className="mb-10 space-y-3 text-center">
            <svg className="w-16 h-16 mx-auto mb-6 shrink-0 select-none drop-shadow-[0_0_15px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
              <defs>

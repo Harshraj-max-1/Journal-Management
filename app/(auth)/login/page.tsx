@@ -53,7 +53,7 @@ export default function LoginPage() {
       <div className="absolute top-[-20%] right-[-10%] w-[120vw] h-[120vw] bg-[var(--primary)]/10 rounded-full blur-[140px] -z-10 animate-pulse"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[100vw] h-[100vw] bg-[var(--secondary)]/10 rounded-full blur-[140px] -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-      <div ref={cardRef} className="cyber-container w-full max-w-xl p-10 md:p-20 relative z-10 animated-border">
+      <div ref={cardRef} className="cyber-container w-full max-w-xl p-10 md:p-20 relative z-10">
         <header className="mb-12 md:mb-16 space-y-6 text-center">
            <div className="relative inline-block">
               <svg className="w-24 h-24 mx-auto mb-8 shrink-0 select-none drop-shadow-[0_0_20px_var(--primary)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
