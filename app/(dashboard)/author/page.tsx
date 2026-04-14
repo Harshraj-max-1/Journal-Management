@@ -23,7 +23,10 @@ interface Paper {
   title: string;
   status: string;
   fileUrl: string;
+  editedTitle?: string;
+  editedAbstract?: string;
   createdAt: string;
+  reviews?: any[];
 }
 
 export default function AuthorDashboard() {
@@ -137,14 +140,19 @@ export default function AuthorDashboard() {
                      <span className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border ${getStatusColor(paper.status)} shadow-sm`}>
                        {paper.status.replace('_', ' ')}
                      </span>
+                     {paper.editedTitle && (
+                        <span className="px-3 py-2 rounded-xl bg-orange-50 text-orange-600 border border-orange-100 text-[8px] font-black uppercase tracking-widest animate-pulse flex items-center gap-2">
+                           <Zap className="w-3 h-3" /> Refined by Editor
+                        </span>
+                     )}
                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-40">NODE_ID: {paper.id.slice(-8)}</span>
                   </div>
                   <h3 className="text-3xl font-black tracking-tighter text-[var(--on-background)] leading-[1.1] transition-colors group-hover:text-[var(--primary)]">
                     {paper.title}
                   </h3>
                   <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                     <span className="flex items-center gap-2 group-hover:text-slate-300 transition-colors"><Clock className="w-4 h-4 opacity-40" /> Updated-T:12D</span>
-                     <span className="flex items-center gap-2 group-hover:text-[var(--primary)] transition-colors"><ExternalLink className="w-4 h-4 opacity-40" /> View Submission</span>
+                     <span className="flex items-center gap-2 group-hover:text-slate-300 transition-colors"><Clock className="w-4 h-4 opacity-40" /> Verified: {new Date(paper.createdAt).toLocaleDateString()}</span>
+                     <span className="flex items-center gap-2 group-hover:text-[var(--primary)] transition-colors"><Search className="w-4 h-4 opacity-40" /> View Analysis & Feedback</span>
                   </div>
                 </div>
 
@@ -152,13 +160,12 @@ export default function AuthorDashboard() {
                 <div className="hidden lg:flex col-span-4 justify-center px-4 w-full">
                    <div className="flex justify-between items-start w-full max-w-[400px] relative pt-2">
                       {['SUBMITTED', 'UNDER_REVIEW', 'ACCEPTED', 'PUBLISHED'].map((stepStatus, idx) => {
-                        // Current status index calculation
                         const steps = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'ACCEPTED', 'PUBLISHED'];
                         const currentIndex = steps.indexOf(paper.status);
                         const stepIndex = steps.indexOf(stepStatus);
                         
                         const isCompleted = currentIndex >= stepIndex;
-                        const isCurrent = paper.status === stepStatus || (paper.status === 'REJECTED' && idx === 1); // Show rejected at 'Under Review'
+                        const isCurrent = paper.status === stepStatus || (paper.status === 'REJECTED' && idx === 1);
                         const isRejected = paper.status === 'REJECTED' && idx === 1;
 
                         return (
@@ -207,6 +214,7 @@ export default function AuthorDashboard() {
         onClose={() => setSelectedPaper(null)}
         pdfUrl={selectedPaper?.fileUrl || ""}
         title={selectedPaper?.title}
+        reviews={selectedPaper?.reviews}
       />
     </div>
   );

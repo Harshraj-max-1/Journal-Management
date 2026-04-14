@@ -16,6 +16,7 @@ export async function GET(req: Request) {
     if (role === 'AUTHOR') {
       papers = await prisma.paper.findMany({ 
         where: { authorId: (session.user as any).id },
+        include: { reviews: true },
         orderBy: { createdAt: 'desc' }
       });
     } else if (role === 'PUBLISHER') {

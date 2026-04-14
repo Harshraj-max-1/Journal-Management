@@ -49,14 +49,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   try {
     const body = await req.json();
-    const { status, title, abstract } = body;
+    const { status, title, abstract, editedTitle, editedAbstract, editorNotes } = body;
 
     const paper = await prisma.paper.update({
       where: { id },
       data: { 
         ...(status && { status }),
         ...(title && { title }),
-        ...(abstract && { abstract })
+        ...(abstract && { abstract }),
+        ...(editedTitle && { editedTitle }),
+        ...(editedAbstract && { editedAbstract }),
+        ...(editorNotes && { editorNotes })
       }
     });
 

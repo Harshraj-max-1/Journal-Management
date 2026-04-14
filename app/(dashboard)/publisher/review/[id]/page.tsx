@@ -104,14 +104,14 @@ export default function PublisherComparisonPage({ params }: { params: Promise<{ 
             </section>
 
             {/* Version 2: Editor */}
-            <section className="review-panel space-y-8 p-12 bg-white rounded-[48px] border-2 border-indigo-100 shadow-2xl shadow-indigo-50">
-              <div className="flex justify-between items-center border-b border-indigo-50 pb-6">
-                <h3 className="text-xs font-black uppercase tracking-widest text-indigo-600">V2: Editorial Refinement</h3>
-                 <span className="text-[10px] font-black uppercase bg-indigo-600 text-white px-3 py-1 rounded-lg animate-pulse">OPTIMIZED</span>
+            <section className="review-panel space-y-8 p-12 bg-white rounded-[48px] border-2 border-[var(--primary)]/20 shadow-2xl shadow-[var(--primary)]/5">
+              <div className="flex justify-between items-center border-b border-slate-50 pb-6">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[var(--primary)]">V2: Editorial Refinement</h3>
+                 <span className="text-[10px] font-black uppercase bg-[var(--primary)] text-black px-3 py-1 rounded-lg animate-pulse">OPTIMIZED</span>
               </div>
               <div className="space-y-6">
-                <h4 className="text-3xl font-extrabold tracking-tight text-indigo-900 leading-none">{paper.editedTitle || paper.originalTitle}</h4>
-                <p className="text-sm font-bold italic text-indigo-700 leading-relaxed bg-indigo-50/50 p-6 rounded-3xl border border-indigo-50">"{paper.editedAbstract || paper.originalAbstract}"</p>
+                <h4 className="text-3xl font-extrabold tracking-tight text-[var(--on-background)] leading-none">{paper.editedTitle || paper.originalTitle}</h4>
+                <p className="text-sm font-bold italic text-slate-500 leading-relaxed bg-slate-50 p-6 rounded-3xl border border-slate-100">"{paper.editedAbstract || paper.originalAbstract}"</p>
                  { (paper.editedFileUrl || paper.originalFileUrl) && (
                   <button 
                     onClick={() => setSelectedPaper({ url: paper.editedFileUrl || paper.originalFileUrl, title: paper.editedTitle || paper.originalTitle })}
@@ -122,9 +122,12 @@ export default function PublisherComparisonPage({ params }: { params: Promise<{ 
                 )}
               </div>
               {paper.editorNotes && (
-                <div className="bg-slate-900 rounded-[32px] p-8 text-xs font-bold uppercase tracking-widest text-slate-400 border border-slate-800">
-                  <span className="text-[10px] text-white block mb-4 italic opacity-40">Internal Directive:</span>
-                   "{paper.editorNotes}"
+                <div className="bg-slate-900 rounded-[32px] p-8 text-xs font-bold uppercase tracking-widest text-slate-400 border border-slate-800 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-10">
+                     <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <span className="text-[10px] text-white block mb-4 italic opacity-60">INTERNAL EDITORIAL DIRECTIVE (Strictly Confidential):</span>
+                   <p className="text-slate-300 normal-case tracking-normal text-sm font-medium leading-relaxed">"{paper.editorNotes}"</p>
                 </div>
               )}
             </section>
@@ -137,6 +140,12 @@ export default function PublisherComparisonPage({ params }: { params: Promise<{ 
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-full blur-3xl -z-10"></div>
               <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 border-b border-slate-50 pb-6">Manuscript Appraisal</h3>
               
+              <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 mb-6">
+                 <p className="text-[8px] font-black uppercase tracking-widest text-amber-600 leading-relaxed">
+                   Notice: Your critique narrative will be shared with the Author as the official reason for the decision. Preserve academic professionalism.
+                 </p>
+              </div>
+
               <form onSubmit={handleSubmitReview} className="space-y-12">
                 <div className="space-y-6">
                   <div className="flex justify-between items-end">
